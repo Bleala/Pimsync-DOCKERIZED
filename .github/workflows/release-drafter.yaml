@@ -1,0 +1,30 @@
+name: Draft Release Notes 📝🎉
+run-name: Draft Release Notes 📝🎉
+on:
+  push:
+    # branches to consider in the event; optional, defaults to all
+    branches:
+      - main
+  # pull_request event is required only for autolabeler
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  draft-release-notes:
+    name: Draft Release Notes 📝🎉
+    uses: Bleala/Reusable-Workflows/.github/workflows/reusable-release-drafter.yaml@main
+    permissions:
+      # write permission is required to create a github release
+      contents: write
+      # write permission is required for autolabeler
+      # otherwise, read permission is required at least
+      pull-requests: write
+    secrets:
+      GITHUB_WORKFLOW_TOKEN: ${{ secrets.GITHUB_TOKEN }}
