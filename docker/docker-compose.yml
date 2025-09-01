@@ -1,0 +1,29 @@
+networks:
+  pimsync:
+    name: pimsync
+    driver: bridge
+
+services:
+  # Pimsync - to synchronise calendars and contacts between different storages. DOCKERIZED!
+  # https://hub.docker.com/r/bleala/pimsync
+  # https://github.com/Bleala/Pimsync-DOCKERIZED
+  pimsync:
+    image: bleala/pimsync:latest
+    container_name: pimsync
+    hostname: pimsync
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      # Optional: set your timezone, for correct container and log time, default to Europe/Vienna
+      TZ: Europe/Vienna
+    env_file:
+      - path: .env
+        required: false
+    networks:
+      pimsync:
+    volumes:
+      - type: bind
+        source: /path/to/pimsync.conf
+        target: /etc/pimsync/pimsync.conf
+        read_only: true

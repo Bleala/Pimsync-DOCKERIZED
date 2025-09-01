@@ -1,0 +1,6 @@
+services:
+  pimsync:
+    image: bleala/pimsync:dev
+    build:
+      context: ./docker
+      dockerfile: Dockerfile
