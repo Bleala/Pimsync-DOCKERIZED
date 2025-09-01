@@ -23,8 +23,8 @@ jobs:
     name: Lint Dockerfile 🐳📄🔍
     uses: Bleala/Reusable-Workflows/.github/workflows/reusable-dockerfile-linter.yaml@main
     with:
-      ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.source || github.ref }}
       ignore: SC2015
+      ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.source || github.ref }}
     permissions:
       # for actions/checkout to fetch code
       contents: read
