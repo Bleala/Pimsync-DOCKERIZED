@@ -1,0 +1,16 @@
+# Deaktiviert die Erstellung von leeren Issues und zwingt Benutzer, eine Vorlage zu wählen.
+blank_issues_enabled: false
+
+# Links zu externen Seiten, die auf der "New Issue"-Seite angezeigt werden, um Benutzer an die richtige Stelle zu leiten.
+contact_links:
+  - name: ❓ Ask a question / Start a discussion
+    url: https://github.com/Bleala/Pimsync-DOCKERIZED/discussions/new
+    about: Please use GitHub Discussions for questions, suggestions, and general discussions.
+
+  - name: 📖 Read the Documentation
+    url: https://github.com/Bleala/Pimsync-DOCKERIZED/blob/master/README.md
+    about: Please check the documentation first for setup instructions and configuration details.
+
+  - name: 🛡️ Report a Security Vulnerability
+    url: https://github.com/Bleala/Pimsync-DOCKERIZED/security/advisories/new
+    about: Please report security vulnerabilities privately. Do not create a public issue.
