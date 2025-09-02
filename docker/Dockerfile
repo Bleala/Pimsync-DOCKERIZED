@@ -78,7 +78,7 @@ RUN set -x && \
 # -----------------------------------------------------------------------------------------------
 
 # Set Alpine as the base image
-FROM alpine:${ALPINE_VERSION}
+FROM alpine:${ALPINE_VERSION} AS pimsync
 
 # Build arguments
 ARG ALPINE_VERSION \
