@@ -51,16 +51,7 @@ RUN set -x && \
     # Compile Pimsync
     make build && \
     # Install Pimsync
-    make install
-  
-# Set workdir to the tmp directory
-WORKDIR /pimsync
-
-# Finalize the build stage
-RUN set -x && \
-    rm -rf "/tmp/pimsync-build-${PIMSYNC_VERSION}" && \
-    # Clean up build dependencies
-    apk del .build-deps && \
+    make install && \
     # Echo the build date
     echo "Build date: ${BUILD_DATE}" > /pimsync/build_date.txt
 
@@ -140,7 +131,7 @@ COPY --from=pimsync-builder /usr/local/bin/pimsync /usr/local/bin/pimsync
 COPY --from=pimsync-builder /usr/local/share/man /usr/local/share/man
 
 # Copy build date file
-COPY --from=pimsync-builder /pimsync/build_date.txt /pimsync/build_date.txt
+COPY --from=pimsync-builder /tmp/build_date.txt /tmp/build_date.txt
 
 # Copy Files
 COPY files /files
