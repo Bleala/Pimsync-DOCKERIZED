@@ -6,7 +6,7 @@ ARG ALPINE_VERSION="3.22.1" \
 # -----------------------------------------------------------------------------------------------
 
 # Set Alpine as the base image for building Pimsync
-FROM alpine:${ALPINE_VERSION} AS pimsync-build
+FROM alpine:${ALPINE_VERSION} AS pimsync-builder
 
 # Set arguments for Pimsync version and build date
 ARG ALPINE_VERSION \
@@ -89,10 +89,24 @@ ARG ALPINE_VERSION \
     PIMSYNC_VERSION
 
 # Set environment variables
+    # Set Mode for container
+ENV CONTAINER_MODE="auto" \
     # Set Pimsync path
-ENV PATH="/usr/local/bin/pimsync:${PATH}" \
+    PATH="/usr/local/bin/pimsync:${PATH}" \
     # Set Timezone
     TZ="Europe/Vienna" \
+    # Pimsync Command
+    PIMSYNC_COMMAND="daemon" \
+    # Pimsync Config
+    PIMSYNC_CONFIG="/pimsync/pimsync.conf" \
+    # Pimsync Path
+    PIMSYNC_EXECUTABLE_PATH="/usr/local/bin/pimsync" \
+    # Pimsync Log Level
+    PIMSYNC_LOG_LEVEL="info" \
+    # Set script path to run after Pimsync commands
+    PIMSYNC_POST_SYNC_SCRIPT_FILE="" \
+    # Set script path to run before Pimsync commands
+    PIMSYNC_PRE_SYNC_SCRIPT_FILE="" \
     # Set Pimsync user and group
     PIMSYNC_USER="${PIMSYNC_USER}"
 
@@ -124,19 +138,16 @@ RUN apk update && \
 WORKDIR /pimsync
 
 # Copy Pimsync from the build stage 
-COPY --from=pimsync-build /usr/local/bin/pimsync /usr/local/bin/pimsync
+COPY --from=pimsync-builder /usr/local/bin/pimsync /usr/local/bin/pimsync
 
 # Copy the Pimsync manual pages
-COPY --from=pimsync-build /usr/local/share/man /usr/local/share/man
+COPY --from=pimsync-builder /usr/local/share/man /usr/local/share/man
 
 # Copy build date file
-COPY --from=pimsync-build /pimsync/build_date.txt /pimsync/build_date.txt
+COPY --from=pimsync-builder /pimsync/build_date.txt /pimsync/build_date.txt
 
 # Copy Files
 COPY files /files
-
-# Copy example configuration file
-COPY files/examples/pimsync.conf /pimsync/pimsync.conf.example
 
 # Add Pimsync user and group
 RUN addgroup -g "${PIMSYNC_USER_GID}" -S "${PIMSYNC_USER}" && \
