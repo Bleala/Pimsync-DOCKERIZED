@@ -1,6 +1,5 @@
 # Global variables
 ARG ALPINE_VERSION="3.22.1" \
-    BUILD_DATE="2025-09-01T20:00:00Z" \
     PIMSYNC_VERSION="0.4.4"
 
 # -----------------------------------------------------------------------------------------------
@@ -64,7 +63,6 @@ FROM alpine:${ALPINE_VERSION} AS pimsync
 
 # Build arguments
 ARG ALPINE_VERSION \
-    BUILD_DATE \
     PIMSYNC_USER="pimsync" \
     PIMSYNC_USER_UID="1000" \
     PIMSYNC_USER_GID="1000" \
@@ -95,17 +93,6 @@ ENV CONTAINER_MODE="auto" \
 # Healthcheck
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=1 \
   CMD ["/files/scripts/healthcheck.sh"]
-
-# Set labels
-LABEL org.opencontainers.image.authors="Bleala" \
-      org.opencontainers.image.vendor="Bleala" \
-      org.opencontainers.image.version="${PIMSYNC_VERSION}" \
-      org.opencontainers.image.created="${BUILD_DATE}" \
-      org.opencontainers.image.title="Pimsync-DOCKERIZED" \
-      org.opencontainers.image.description="Pimsync - to synchronise calendars and contacts between different storages. DOCKERIZED!" \
-      org.opencontainers.image.documentation="https://pimsync.whynothugo.nl/" \
-      org.opencontainers.image.url="https://hub.docker.com/r/bleala/pimsync" \
-      org.opencontainers.image.source="https://github.com/Bleala/Pimsync-DOCKERIZED"
 
 # Install runtime dependencies
 RUN apk update && \
@@ -141,9 +128,21 @@ RUN addgroup -g "${PIMSYNC_USER_GID}" -S "${PIMSYNC_USER}" && \
     # Set permissions for Pimsync directories and scripts
     chown -R "${PIMSYNC_USER}":"${PIMSYNC_USER}" /pimsync && \
     chown -R "${PIMSYNC_USER}":"${PIMSYNC_USER}" /files && \
-    chmod +x /files/scripts/*.sh && \
-    # Echo Build date to /tmp/pimsync_build_date.txt
-    echo "Pimsync build date: ${BUILD_DATE}" > /tmp/pimsync_build_date.txt
+    chmod +x /files/scripts/*.sh
+
+# Set build date argument here, because caching would break otherwise
+ARG BUILD_DATE
+
+# Set labels
+LABEL org.opencontainers.image.authors="Bleala" \
+      org.opencontainers.image.vendor="Bleala" \
+      org.opencontainers.image.version="${PIMSYNC_VERSION}" \
+      org.opencontainers.image.created="${BUILD_DATE}" \
+      org.opencontainers.image.title="Pimsync-DOCKERIZED" \
+      org.opencontainers.image.description="Pimsync - to synchronise calendars and contacts between different storages. DOCKERIZED!" \
+      org.opencontainers.image.documentation="https://pimsync.whynothugo.nl/" \
+      org.opencontainers.image.url="https://hub.docker.com/r/bleala/pimsync" \
+      org.opencontainers.image.source="https://github.com/Bleala/Pimsync-DOCKERIZED"
 
 # Switch to Pimsync user
 USER "${PIMSYNC_USER}"
