@@ -29,9 +29,9 @@ LABEL org.opencontainers.image.authors="Bleala" \
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
 # Set workdir
-WORKDIR /tmp/pimsync-build
+WORKDIR /tmp/pimsync-build-${PIMSYNC_VERSION}
 
-# Install build dependencies, build pimsync and remove dependencies
+# Install build dependencies, clone git repository, verify gpg key, build pimsync and install pimsync
 RUN set -x && \
     apk update && \
     apk add --no-cache --virtual .build-deps \
@@ -46,27 +46,22 @@ RUN set -x && \
       sqlite-dev=~3.49.2 \
       mandoc=~1.14.6 && \
     # Download Pimsync from Sourcehut
-    git clone "${PIMSYNC_GIT}" "/tmp/pimsync-build/pimsync-${PIMSYNC_VERSION}" && \
-    # Import GPG Key from Pimsync developer/website
+    git clone "${PIMSYNC_GIT}" "/tmp/pimsync-build-${PIMSYNC_VERSION}" && \
+    # Curl complete website, where the GPG key is located
     curl -sL "https://pimsync.whynothugo.nl/install.html" | \
+    # Dump it with lynx
     lynx -stdin -dump | \
+    # Extract the GPG key with awk
     awk '/BEGIN PGP PUBLIC KEY BLOCK/,/END PGP PUBLIC KEY BLOCK/' | \
-    gpg --import -
-
-# Set workdir to the git Pimsync directory
-WORKDIR /tmp/pimsync-build/pimsync-${PIMSYNC_VERSION}
-
-# # Prepare git directory for Pimsync
-RUN set -x && \
+    # Import GPG Key from Pimsync developer/website
+    gpg --import - && \
     # Checkout the specific version
     git checkout "v${PIMSYNC_VERSION}" && \
     # Verify the git tag with GPG and grep for "Good signature from", because gpg key is expired at the moment
-    git tag -v "v${PIMSYNC_VERSION}" 2>&1 | grep -e "Good signature from" || true
-
-# Build Pimsync
-RUN set -x && \
-    # Compile and install Pimsync
+    git tag -v "v${PIMSYNC_VERSION}" 2>&1 | grep -e "Good signature from" || true && \
+    # Compile Pimsync
     make build && \
+    # Install Pimsync
     make install
   
 # Set workdir to the tmp directory
@@ -74,7 +69,7 @@ WORKDIR /pimsync
 
 # Finalize the build stage
 RUN set -x && \
-    rm -rf /tmp/pimsync-build && \
+    rm -rf "/tmp/pimsync-build-${PIMSYNC_VERSION}" && \
     # Clean up build dependencies
     apk del .build-deps && \
     # Echo the build date
@@ -116,9 +111,6 @@ LABEL org.opencontainers.image.authors="Bleala" \
       org.opencontainers.image.url="https://hub.docker.com/r/bleala/pimsync" \
       org.opencontainers.image.source="https://github.com/Bleala/Pimsync-DOCKERIZED"
 
-# Set workdir
-WORKDIR /pimsync
-
 # Install runtime dependencies
 RUN apk update && \
     apk add --no-cache \
@@ -128,14 +120,13 @@ RUN apk update && \
       mandoc=~1.14.6 \
       tzdata=~2025b
 
-# Add Pimsync user and group
-RUN addgroup -g "${PIMSYNC_USER_GID}" -S "${PIMSYNC_USER}" && \
-    adduser -u "${PIMSYNC_USER_UID}" -S -D -H -G "${PIMSYNC_USER}" "${PIMSYNC_USER}"
+# Set workdir
+WORKDIR /pimsync
 
 # Copy Pimsync from the build stage 
 COPY --from=pimsync-build /usr/local/bin/pimsync /usr/local/bin/pimsync
 
-# Copy the Pimsync configuration file
+# Copy the Pimsync manual pages
 COPY --from=pimsync-build /usr/local/share/man /usr/local/share/man
 
 # Copy build date file
@@ -144,11 +135,14 @@ COPY --from=pimsync-build /pimsync/build_date.txt /pimsync/build_date.txt
 # Copy Files
 COPY files /files
 
-# Copy example configuration files
+# Copy example configuration file
 COPY files/examples/pimsync.conf /pimsync/pimsync.conf.example
 
-# Set permissions for Pimsync directories and scripts
-RUN chown -R "${PIMSYNC_USER}":"${PIMSYNC_USER}" /pimsync && \
+# Add Pimsync user and group
+RUN addgroup -g "${PIMSYNC_USER_GID}" -S "${PIMSYNC_USER}" && \
+    adduser -u "${PIMSYNC_USER_UID}" -S -D -H -G "${PIMSYNC_USER}" "${PIMSYNC_USER}" && \
+    # Set permissions for Pimsync directories and scripts
+    chown -R "${PIMSYNC_USER}":"${PIMSYNC_USER}" /pimsync && \
     chown -R "${PIMSYNC_USER}":"${PIMSYNC_USER}" /files && \
     chmod +x /files/scripts/*.sh 
 
