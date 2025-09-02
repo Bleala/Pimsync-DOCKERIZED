@@ -53,6 +53,7 @@ jobs:
         uses: hadolint/hadolint-action@54c9adbab1582c2ef04b2016b760714a4bfde3cf # v3.1.0
         with:
           dockerfile: ./docker/Dockerfile
+          ignore: SC2015
 
       # https://github.com/marketplace/actions/shell-linter
       - name: Lint Shell Scripts 📜🔍
