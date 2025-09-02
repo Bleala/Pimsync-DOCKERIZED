@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Set TS function for logging
-# Moreutils (which contains ts command) would need to much space in my opinion, because of perl dependencies
+# Moreutils (which contains ts command) would need too much space in my opinion, because of perl dependencies
 # So awk is used
 ts_awk(){
     awk '{ printf "[%s] %s\n", strftime("%Y-%m-%d %H:%M:%S"), $0; fflush() }'
@@ -10,36 +10,33 @@ ts_awk(){
 # Function to log messages with timestamp, reduce code duplication
 log_message() {
     {
-        echo "$@"
+        # Remove tabs and leading spaces from the message
+        printf "%s\n" "$@" | sed 's/^[ \t]*//'
         printf "\n"
     } 2>&1 | ts_awk
 }
 
 # Welcome Message
-{
-    echo "Welcome to Pimsync-DOCKERIZED! :)"
-    printf "\n"
+log_message "Welcome to Pimsync-DOCKERIZED! :)"
 
-    echo "For more information please visit the official docs page."
-    echo "There you will also find configuration examples."
-    echo "https://pimsync.whynothugo.nl/"
-    printf "\n"
+log_message "For more information please visit the official docs page.
+            There you will also find configuration examples.
+            https://pimsync.whynothugo.nl/"
 
-    echo "If you have any problems with Pimsync, please"
-    echo "visit the Sourcehut repository and open an issue."
-    echo "https://git.sr.ht/~whynothugo/pimsync"
-    printf "\n"
+log_message "If you have any problems with Pimsync, please
+            visit the Sourcehut repository and open an issue.
+            https://git.sr.ht/~whynothugo/pimsync"
 
-    echo "If there is a problem with the container,"
-    echo "contact me or open an issue in my Github repo."
-    echo "https://github.com/Bleala/Pimsync-DOCKERIZED"
-    echo "I am trying to fix it, so that everything"
-    echo "is running as expected. :)"
-    printf "\n"
+log_message "If there is a problem with the container,
+            contact me or open an issue in my Github repo.
+            https://github.com/Bleala/Pimsync-DOCKERIZED
+            I am trying to fix it, so that everything
+            is running as expected. :)"
 
-    echo "Enjoy!"
-    printf "\n"
-} 2>&1 | ts_awk
+log_message "Enjoy!"
+
+# Line
+log_message "----------------------------------------"
 
 # Starting logging
 log_message "Starting Logging."
@@ -105,20 +102,19 @@ else
     POST_SYNC_SNIPPET="&& ${PIMSYNC_POST_SYNC_SCRIPT_FILE}"
 fi
 
+# Line
+log_message "----------------------------------------"
+
 # If container is in automatic mode
 if [ "${CONTAINER_MODE}" = "auto" ]
 then
-    :
-
     # User info
-    {
-        echo "Container is running in automatic mode."
-        printf "\n"
-        echo "Starting Pimsync with command: ${PRE_SYNC_SNIPPET} ${PIMSYNC_EXECUTABLE_PATH} -c ${PIMSYNC_CONFIG} -v ${PIMSYNC_LOG_LEVEL} ${PIMSYNC_COMMAND} ${POST_SYNC_SNIPPET}"
-        printf "\n"
-        echo "#######################################"
-        printf "\n"
-    } 2>&1 | ts_awk
+    log_message "Container is running in automatic mode."
+
+    log_message "Starting Pimsync with command: ${PRE_SYNC_SNIPPET} ${PIMSYNC_EXECUTABLE_PATH} -c ${PIMSYNC_CONFIG} -v ${PIMSYNC_LOG_LEVEL} ${PIMSYNC_COMMAND} ${POST_SYNC_SNIPPET}"
+
+    # Line
+    log_message "----------------------------------------"
 
     # Start Pimsync
     eval "exec ${PRE_SYNC_SNIPPET} ${PIMSYNC_EXECUTABLE_PATH} -c ${PIMSYNC_CONFIG} -v ${PIMSYNC_LOG_LEVEL} ${PIMSYNC_COMMAND} ${POST_SYNC_SNIPPET}" 2>&1 | ts_awk
@@ -127,18 +123,16 @@ then
 elif [ "${CONTAINER_MODE}" = "manual" ]
 then
     # User info
-    {
-        echo "Container is running in manual mode."
-        printf "\n"
-        echo "To start Pimsync, please use the following command:"
-        echo "${PRE_SYNC_SNIPPET} pimsync ${PIMSYNC_COMMAND} ${POST_SYNC_SNIPPET}"
-        printf "\n"
-        echo "To enter the container, please use the following command:"
-        echo "docker exec -it <container_name> /bin/sh"
-        printf "\n"
-        echo "#######################################"
-        printf "\n"
-    } 2>&1 | ts_awk
+    log_message "Container is running in manual mode."
+
+    log_message "To enter the container, please use the following command:
+                docker exec -it <container_name> /bin/sh"
+
+    log_message "To start Pimsync, please use the following command:
+                pimsync <your-command>"
+
+    # Line
+    log_message "----------------------------------------"
 
     # Start container
     exec tail -f /dev/null
@@ -146,15 +140,11 @@ then
 # If CONTAINER_MODE is not set correctly
 else
     # User info
-    {
-        echo "CONTAINER_MODE is not set correctly!"
-        echo "Please set CONTAINER_MODE to \"auto\" or \"manual\"."
-        printf "\n"
-        echo "Container is stopping now."
-        printf "\n"
-        echo "#######################################"
-        printf "\n"
-    } 2>&1 | ts_awk
+    log_message "CONTAINER_MODE is not set correctly!
+                Please set CONTAINER_MODE to \"auto\" or \"manual\"."
+
+    log_message "Container is stopping now."
+
 
     # Exit script with error code 1
     exit 1
