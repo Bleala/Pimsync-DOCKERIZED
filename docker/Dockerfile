@@ -100,8 +100,8 @@ ENV CONTAINER_MODE="auto" \
     PIMSYNC_USER="${PIMSYNC_USER}"
 
 # Healthcheck
-# HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
-#   CMD nslookup -timeout=1 -retry=1 google.com 127.0.0.1 || exit 1
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=1 \
+  CMD ["/files/scripts/healthcheck.sh"]
 
 # Set labels
 LABEL org.opencontainers.image.authors="Bleala" \
