@@ -7,6 +7,14 @@ ts_awk(){
     awk '{ printf "[%s] %s\n", strftime("%Y-%m-%d %H:%M:%S"), $0; fflush() }'
 }
 
+# Function to log messages with timestamp, reduce code duplication
+log_message() {
+    {
+        echo "$@"
+        printf "\n"
+    } 2>&1 | ts_awk
+}
+
 # Welcome Message
 {
     echo "Welcome to Pimsync-DOCKERIZED! :)"
@@ -34,58 +42,37 @@ ts_awk(){
 } 2>&1 | ts_awk
 
 # Starting logging
-{
-    echo "Starting Logging..."
-    printf "\n"
-} 2>&1 | ts_awk
+log_message "Starting Logging."
 
-# Log current Timezone and Date/Time
-{
-    echo "Current timezone is ${TZ}."
-    echo "Current time is $(date)."
-    printf "\n"
-} 2>&1 | ts_awk
+# Log current Timezone
+log_message "Current timezone is ${TZ}."
+
+# Log current Date/Time
+log_message "Current time is $(date)."
 
 # Log current CONTAINER_MODE
-{
-    echo "Current CONTAINER_MODE is ${CONTAINER_MODE}."
-    printf "\n"
-} 2>&1 | ts_awk
+log_message "Current CONTAINER_MODE is ${CONTAINER_MODE}."
 
 # Log current PIMSYNC_COMMAND
-{
-    echo "Current PIMSYNC_COMMAND is ${PIMSYNC_COMMAND}."
-    printf "\n"
-} 2>&1 | ts_awk
+log_message "Current PIMSYNC_COMMAND is ${PIMSYNC_COMMAND}."
 
 # Log current PIMSYNC_CONFIG
-{
-    echo "Current PIMSYNC_CONFIG is ${PIMSYNC_CONFIG}."
-    printf "\n"
-} 2>&1 | ts_awk
+log_message "Current PIMSYNC_CONFIG is ${PIMSYNC_CONFIG}."
 
 # Log current PIMSYNC_EXECUTABLE_PATH
-{
-    echo "Current PIMSYNC_EXECUTABLE_PATH is ${PIMSYNC_EXECUTABLE_PATH}."
-    printf "\n"
-} 2>&1 | ts_awk
+log_message "Current PIMSYNC_EXECUTABLE_PATH is ${PIMSYNC_EXECUTABLE_PATH}."
 
 # Log current PIMSYNC_LOG_LEVEL
-{
-    echo "Current PIMSYNC_LOG_LEVEL is ${PIMSYNC_LOG_LEVEL}."
-    printf "\n"
-} 2>&1 | ts_awk
+log_message "Current PIMSYNC_LOG_LEVEL is ${PIMSYNC_LOG_LEVEL}."
 
 # Check if the pimsync.conf.example exists
 if [ ! -e "/pimsync/pimsync.conf.example" ]
 then
     # Copy pimsync.conf.example to vdirsyncer directory
     cp /files/examples/pimsync.conf.example /pimsync/pimsync.conf.example
+    
     # User info
-    {
-        echo "pimsync.conf.example has been copied to /pimsync."
-        printf "\n"
-    } 2>&1 | ts_awk
+    log_message "pimsync.conf.example has been copied to /pimsync."
 fi
 
 # Check, if PIMSYNC_PRE_SYNC_SCRIPT_FILE is set
@@ -97,10 +84,7 @@ then
 # Set PRE_SYNC_SNIPPET, if  PIMSYNC_PRE_SYNC_SCRIPT_FILE is set
 else
     # User info
-    {
-        echo "Custom before script is enabled."
-        printf "\n"
-    } 2>&1 | ts_awk
+    log_message "Custom before script is enabled."
 
     # Set Post Sync Snippet to Post Sync File
     PRE_SYNC_SNIPPET="${PIMSYNC_PRE_SYNC_SCRIPT_FILE} &&"
@@ -115,10 +99,7 @@ then
 # Set POST_SYNC_SNIPPET, if  PIMSYNC_POST_SYNC_SCRIPT_FILE is set
 else
     # User info
-    {
-        echo "Custom after script is enabled."
-        printf "\n"
-    } 2>&1 | ts_awk
+    log_message "Custom after script is enabled."
 
     # Set Post Sync Snippet to Post Sync File
     POST_SYNC_SNIPPET="&& ${PIMSYNC_POST_SYNC_SCRIPT_FILE}"
@@ -140,7 +121,7 @@ then
     } 2>&1 | ts_awk
 
     # Start Pimsync
-    exec "${PRE_SYNC_SNIPPET} ${PIMSYNC_EXECUTABLE_PATH} -c ${PIMSYNC_CONFIG} -v ${PIMSYNC_LOG_LEVEL} ${PIMSYNC_COMMAND} ${POST_SYNC_SNIPPET}" 2>&1 | ts_awk
+    eval "exec ${PRE_SYNC_SNIPPET} ${PIMSYNC_EXECUTABLE_PATH} -c ${PIMSYNC_CONFIG} -v ${PIMSYNC_LOG_LEVEL} ${PIMSYNC_COMMAND} ${POST_SYNC_SNIPPET}" 2>&1 | ts_awk
 
 # If container is in manual mode
 elif [ "${CONTAINER_MODE}" = "manual" ]
