@@ -76,35 +76,35 @@ fi
 
 # Has to be implemented for the manual mode or a special cron mode
 # Check, if PIMSYNC_PRE_SYNC_SCRIPT_FILE is set
-if [ -z "${PIMSYNC_PRE_SYNC_SCRIPT_FILE}" ]
-then
-    # Set Post Sync Snippet to nothing
-    PRE_SYNC_SNIPPET=""
+# if [ -z "${PIMSYNC_PRE_SYNC_SCRIPT_FILE}" ]
+# then
+#     # Set Post Sync Snippet to nothing
+#     PRE_SYNC_SNIPPET=""
 
-# Set PRE_SYNC_SNIPPET, if  PIMSYNC_PRE_SYNC_SCRIPT_FILE is set
-else
-    # User info
-    log_message "Custom before script is enabled."
+# # Set PRE_SYNC_SNIPPET, if  PIMSYNC_PRE_SYNC_SCRIPT_FILE is set
+# else
+#     # User info
+#     log_message "Custom before script is enabled."
 
-    # Set Post Sync Snippet to Post Sync File
-    PRE_SYNC_SNIPPET="${PIMSYNC_PRE_SYNC_SCRIPT_FILE} &&"
-fi
+#     # Set Post Sync Snippet to Post Sync File
+#     PRE_SYNC_SNIPPET="${PIMSYNC_PRE_SYNC_SCRIPT_FILE} &&"
+# fi
 
 # Has to be implemented for the manual mode or a special cron mode
 # Check, if PIMSYNC_POST_SYNC_SCRIPT_FILE is set
-if [ -z "${PIMSYNC_POST_SYNC_SCRIPT_FILE}" ]
-then
-    # Set Post Sync Snippet to nothing
-    POST_SYNC_SNIPPET=""
+# if [ -z "${PIMSYNC_POST_SYNC_SCRIPT_FILE}" ]
+# then
+#     # Set Post Sync Snippet to nothing
+#     POST_SYNC_SNIPPET=""
 
-# Set POST_SYNC_SNIPPET, if  PIMSYNC_POST_SYNC_SCRIPT_FILE is set
-else
-    # User info
-    log_message "Custom after script is enabled."
+# # Set POST_SYNC_SNIPPET, if  PIMSYNC_POST_SYNC_SCRIPT_FILE is set
+# else
+#     # User info
+#     log_message "Custom after script is enabled."
 
-    # Set Post Sync Snippet to Post Sync File
-    POST_SYNC_SNIPPET="&& ${PIMSYNC_POST_SYNC_SCRIPT_FILE}"
-fi
+#     # Set Post Sync Snippet to Post Sync File
+#     POST_SYNC_SNIPPET="&& ${PIMSYNC_POST_SYNC_SCRIPT_FILE}"
+# fi
 
 # Line
 log_message "----------------------------------------"
