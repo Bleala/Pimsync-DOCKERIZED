@@ -14,17 +14,6 @@ ARG ALPINE_VERSION \
     PIMSYNC_VERSION \
     PIMSYNC_GIT="https://git.sr.ht/~whynothugo/pimsync"
 
-# Set labels
-LABEL org.opencontainers.image.authors="Bleala" \
-      org.opencontainers.image.vendor="Bleala" \
-      org.opencontainers.image.version="${PIMSYNC_VERSION}" \
-      org.opencontainers.image.created="${BUILD_DATE}" \
-      org.opencontainers.image.title="Pimsync-DOCKERIZED" \
-      org.opencontainers.image.description="Pimsync - to synchronise calendars and contacts between different storages. DOCKERIZED!" \
-      org.opencontainers.image.documentation="https://pimsync.whynothugo.nl/" \
-      org.opencontainers.image.url="https://hub.docker.com/r/bleala/pimsync" \
-      org.opencontainers.image.source="https://github.com/Bleala/Pimsync-DOCKERIZED"
-
 # Set shell to ash
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
@@ -78,7 +67,7 @@ RUN set -x && \
 # -----------------------------------------------------------------------------------------------
 
 # Set Alpine as the base image
-FROM alpine:${ALPINE_VERSION}
+FROM alpine:${ALPINE_VERSION} AS pimsync
 
 # Build arguments
 ARG ALPINE_VERSION \
