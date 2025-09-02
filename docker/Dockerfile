@@ -117,11 +117,18 @@ LABEL org.opencontainers.image.authors="Bleala" \
 # Install runtime dependencies
 RUN apk update && \
     apk add --no-cache \
+      # For running Pimsync
       sqlite-libs=~3.49.2 \
+      # For running Pimsync
       musl=~1.2.5 \
+      # For running Pimsync
       libgcc=~14.2.0 \
+      # To view the manual pages of Pimsync
       mandoc=~1.14.6 \
-      tzdata=~2025b
+      # For timezone handling
+      tzdata=~2025b \
+      # Tini as a minimal init system to handle signal processing
+      tini=~0.19.0
 
 # Set workdir
 WORKDIR /pimsync
@@ -150,4 +157,4 @@ RUN addgroup -g "${PIMSYNC_USER_GID}" -S "${PIMSYNC_USER}" && \
 USER "${PIMSYNC_USER}"
 
 # Run start script
-ENTRYPOINT ["sh","/files/scripts/start.sh"]
+ENTRYPOINT ["/sbin/tini", "--", "/bin/sh", "/files/scripts/start.sh"]
