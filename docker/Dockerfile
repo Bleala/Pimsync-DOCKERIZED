@@ -10,17 +10,14 @@ FROM alpine:${ALPINE_VERSION} AS pimsync-builder
 
 # Set arguments for Pimsync version and build date
 ARG ALPINE_VERSION \
-    BUILD_DATE \
     PIMSYNC_VERSION \
-    PIMSYNC_GIT="https://git.sr.ht/~whynothugo/pimsync"
+    PIMSYNC_GIT="https://git.sr.ht/~whynothugo/pimsync" \
+    PIMSYNC_WEBSITE="https://pimsync.whynothugo.nl/install.html"
 
 # Set shell to ash
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
-# Set workdir
-WORKDIR /tmp/pimsync-build-${PIMSYNC_VERSION}
-
-# Install build dependencies, clone git repository, verify gpg key, build pimsync and install pimsync
+# Install build dependencies
 RUN set -x && \
     apk update && \
     apk add --no-cache --virtual .build-deps \
@@ -34,10 +31,17 @@ RUN set -x && \
       cargo=~1.87.0 \
       sqlite-dev=~3.49.2 \
       mandoc=~1.14.6 && \
+      # Clean up apk cache
+      rm -rf /var/cache/apk/*
+
+# Set workdir
+WORKDIR /tmp/pimsync-build-${PIMSYNC_VERSION}
+
+# Clone git repository, verify GPG key, build Pimsync and install Pimsync      
     # Download Pimsync from Sourcehut
-    git clone "${PIMSYNC_GIT}" "/tmp/pimsync-build-${PIMSYNC_VERSION}" && \
+RUN git clone "${PIMSYNC_GIT}" "/tmp/pimsync-build-${PIMSYNC_VERSION}" && \
     # Curl complete website, where the GPG key is located
-    curl -sL "https://pimsync.whynothugo.nl/install.html" | \
+    curl -sL "${PIMSYNC_WEBSITE}" | \
     # Dump it with lynx
     lynx -stdin -dump | \
     # Extract the GPG key with awk
@@ -51,9 +55,7 @@ RUN set -x && \
     # Compile Pimsync
     make build && \
     # Install Pimsync
-    make install && \
-    # Echo the build date
-    echo "Build date: ${BUILD_DATE}" > /pimsync/build_date.txt
+    make install
 
 # -----------------------------------------------------------------------------------------------
 
@@ -130,9 +132,6 @@ COPY --from=pimsync-builder /usr/local/bin/pimsync /usr/local/bin/pimsync
 # Copy the Pimsync manual pages
 COPY --from=pimsync-builder /usr/local/share/man /usr/local/share/man
 
-# Copy build date file
-COPY --from=pimsync-builder /tmp/build_date.txt /tmp/build_date.txt
-
 # Copy Files
 COPY files /files
 
@@ -142,7 +141,9 @@ RUN addgroup -g "${PIMSYNC_USER_GID}" -S "${PIMSYNC_USER}" && \
     # Set permissions for Pimsync directories and scripts
     chown -R "${PIMSYNC_USER}":"${PIMSYNC_USER}" /pimsync && \
     chown -R "${PIMSYNC_USER}":"${PIMSYNC_USER}" /files && \
-    chmod +x /files/scripts/*.sh 
+    chmod +x /files/scripts/*.sh && \
+    # Echo Build date to /tmp/pimsync_build_date.txt
+    echo "Pimsync build date: ${BUILD_DATE}" > /tmp/pimsync_build_date.txt
 
 # Switch to Pimsync user
 USER "${PIMSYNC_USER}"
