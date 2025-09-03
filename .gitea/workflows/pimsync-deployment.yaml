@@ -23,7 +23,6 @@ concurrency:
 
 env:
   BUILDCACHE_NAME: ${{ vars.BUILDCACHE_NAME }}
-  BUILD_ARGS: ${{ vars.BUILD_ARGS }}
   DOCKERFILE_PATH: ${{ vars.DOCKERFILE_PATH }}
   IMAGE_NAME: ${{ vars.IMAGE_NAME }}
   PLATFORMS_TO_BUILD: ${{ vars.PLATFORMS_TO_BUILD }}
@@ -137,12 +136,33 @@ jobs:
           username: ${{ env.USERNAME_GITEA }}
           password: ${{ secrets.TOKEN_GITEA }}
 
+      # Prepare build arguments, including a dynamic BUILD_DATE
+      - name: Prepare Build Arguments 🛠️
+        id: prepare-build-args
+        run: |
+          # Create dynamic timestamp for BUILD_DATE
+          BUILD_DATE_VALUE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+          
+          # Get static build arguments from input
+          STATIC_ARGS="${{ env.BUILD_ARGS }}"
+          
+          # Combine static args with dynamic BUILD_DATE, if static args exist
+          if [ -n "$STATIC_ARGS" ]
+          then
+            # If static arguments exist, append BUILD_DATE
+            echo "final_build_args=BUILD_DATE=${BUILD_DATE_VALUE},${STATIC_ARGS}" >> "$GITHUB_OUTPUT"
+          # Just set BUILD_DATE if no static args exist
+          else
+            # If no static arguments, only set BUILD_DATE
+            echo "final_build_args=BUILD_DATE=${BUILD_DATE_VALUE}" >> "$GITHUB_OUTPUT"
+          fi
+
       # https://github.com/marketplace/actions/build-and-push-docker-images
       - name: Build And Push Pre Release Image For Scanning 🏗️🔬
         id: build-and-push-pre-release
         uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.18.0
         with:
-          build-args: ${{ env.BUILD_ARGS }}
+          build-args: ${{ steps.prepare-build-args.outputs.final_build_args }}
           context: ./docker
           platforms: ${{ env.PLATFORMS_TO_BUILD }}
           push: true
@@ -182,7 +202,7 @@ jobs:
         id: build-and-push-final
         uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.18.0
         with:
-          build-args: ${{ env.BUILD_ARGS }}
+          build-args: ${{ steps.prepare-build-args.outputs.final_build_args }}
           context: ./docker
           platforms: ${{ env.PLATFORMS_TO_BUILD }}
           push: true
