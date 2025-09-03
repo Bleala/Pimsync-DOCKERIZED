@@ -131,6 +131,7 @@ RUN addgroup -g "${PIMSYNC_USER_GID}" -S "${PIMSYNC_USER}" && \
     chmod +x /files/scripts/*.sh
 
 # Set build date argument here, because caching would break otherwise
+# It is set during the build process in the reusable workflow
 ARG BUILD_DATE
 
 # Set labels
