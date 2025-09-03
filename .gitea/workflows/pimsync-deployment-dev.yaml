@@ -139,7 +139,7 @@ jobs:
         id: prepare-build-args
         run: |
           # Create dynamic timestamp for BUILD_DATE
-          BUILD_DATE_VALUE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+          BUILD_DATE_VALUE="UTC-$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
           
           # Get static build arguments from input
           STATIC_ARGS="${{ env.BUILD_ARGS }}"
