@@ -1,6 +1,5 @@
 # Global variables
 ARG ALPINE_VERSION="3.22.1" \
-    BUILD_DATE="2025-09-01T20:00:00Z" \
     PIMSYNC_VERSION="0.4.4"
 
 # -----------------------------------------------------------------------------------------------
@@ -10,17 +9,14 @@ FROM alpine:${ALPINE_VERSION} AS pimsync-builder
 
 # Set arguments for Pimsync version and build date
 ARG ALPINE_VERSION \
-    BUILD_DATE \
     PIMSYNC_VERSION \
-    PIMSYNC_GIT="https://git.sr.ht/~whynothugo/pimsync"
+    PIMSYNC_GIT="https://git.sr.ht/~whynothugo/pimsync" \
+    PIMSYNC_WEBSITE="https://pimsync.whynothugo.nl/install.html"
 
 # Set shell to ash
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
-# Set workdir
-WORKDIR /tmp/pimsync-build-${PIMSYNC_VERSION}
-
-# Install build dependencies, clone git repository, verify gpg key, build pimsync and install pimsync
+# Install build dependencies
 RUN set -x && \
     apk update && \
     apk add --no-cache --virtual .build-deps \
@@ -34,10 +30,17 @@ RUN set -x && \
       cargo=~1.87.0 \
       sqlite-dev=~3.49.2 \
       mandoc=~1.14.6 && \
+      # Clean up apk cache
+      rm -rf /var/cache/apk/*
+
+# Set workdir
+WORKDIR /tmp/pimsync-build-${PIMSYNC_VERSION}
+
+# Clone git repository, verify GPG key, build Pimsync and install Pimsync      
     # Download Pimsync from Sourcehut
-    git clone "${PIMSYNC_GIT}" "/tmp/pimsync-build-${PIMSYNC_VERSION}" && \
+RUN git clone "${PIMSYNC_GIT}" "/tmp/pimsync-build-${PIMSYNC_VERSION}" && \
     # Curl complete website, where the GPG key is located
-    curl -sL "https://pimsync.whynothugo.nl/install.html" | \
+    curl -sL "${PIMSYNC_WEBSITE}" | \
     # Dump it with lynx
     lynx -stdin -dump | \
     # Extract the GPG key with awk
@@ -52,17 +55,6 @@ RUN set -x && \
     make build && \
     # Install Pimsync
     make install
-  
-# Set workdir to the tmp directory
-WORKDIR /pimsync
-
-# Finalize the build stage
-RUN set -x && \
-    rm -rf "/tmp/pimsync-build-${PIMSYNC_VERSION}" && \
-    # Clean up build dependencies
-    apk del .build-deps && \
-    # Echo the build date
-    echo "Build date: ${BUILD_DATE}" > /pimsync/build_date.txt
 
 # -----------------------------------------------------------------------------------------------
 
@@ -71,7 +63,6 @@ FROM alpine:${ALPINE_VERSION} AS pimsync
 
 # Build arguments
 ARG ALPINE_VERSION \
-    BUILD_DATE \
     PIMSYNC_USER="pimsync" \
     PIMSYNC_USER_UID="1000" \
     PIMSYNC_USER_GID="1000" \
@@ -100,8 +91,47 @@ ENV CONTAINER_MODE="auto" \
     PIMSYNC_USER="${PIMSYNC_USER}"
 
 # Healthcheck
-# HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
-#   CMD nslookup -timeout=1 -retry=1 google.com 127.0.0.1 || exit 1
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=1 \
+  CMD ["/files/scripts/healthcheck.sh"]
+
+# Install runtime dependencies
+RUN apk update && \
+    apk add --no-cache \
+      # For running Pimsync
+      sqlite-libs=~3.49.2 \
+      # For running Pimsync
+      musl=~1.2.5 \
+      # For running Pimsync
+      libgcc=~14.2.0 \
+      # To view the manual pages of Pimsync
+      mandoc=~1.14.6 \
+      # For timezone handling
+      tzdata=~2025b \
+      # Tini as a minimal init system to handle signal processing
+      tini=~0.19.0
+
+# Set workdir
+WORKDIR /pimsync
+
+# Copy Pimsync from the build stage 
+COPY --from=pimsync-builder /usr/local/bin/pimsync /usr/local/bin/pimsync
+
+# Copy the Pimsync manual pages
+COPY --from=pimsync-builder /usr/local/share/man /usr/local/share/man
+
+# Copy Files
+COPY files /files
+
+# Add Pimsync user and group
+RUN addgroup -g "${PIMSYNC_USER_GID}" -S "${PIMSYNC_USER}" && \
+    adduser -u "${PIMSYNC_USER_UID}" -S -D -H -G "${PIMSYNC_USER}" "${PIMSYNC_USER}" && \
+    # Set permissions for Pimsync directories and scripts
+    chown -R "${PIMSYNC_USER}":"${PIMSYNC_USER}" /pimsync && \
+    chown -R "${PIMSYNC_USER}":"${PIMSYNC_USER}" /files && \
+    chmod +x /files/scripts/*.sh
+
+# Set build date argument here, because caching would break otherwise
+ARG BUILD_DATE
 
 # Set labels
 LABEL org.opencontainers.image.authors="Bleala" \
@@ -114,40 +144,8 @@ LABEL org.opencontainers.image.authors="Bleala" \
       org.opencontainers.image.url="https://hub.docker.com/r/bleala/pimsync" \
       org.opencontainers.image.source="https://github.com/Bleala/Pimsync-DOCKERIZED"
 
-# Install runtime dependencies
-RUN apk update && \
-    apk add --no-cache \
-      sqlite-libs=~3.49.2 \
-      musl=~1.2.5 \
-      libgcc=~14.2.0 \
-      mandoc=~1.14.6 \
-      tzdata=~2025b
-
-# Set workdir
-WORKDIR /pimsync
-
-# Copy Pimsync from the build stage 
-COPY --from=pimsync-builder /usr/local/bin/pimsync /usr/local/bin/pimsync
-
-# Copy the Pimsync manual pages
-COPY --from=pimsync-builder /usr/local/share/man /usr/local/share/man
-
-# Copy build date file
-COPY --from=pimsync-builder /pimsync/build_date.txt /pimsync/build_date.txt
-
-# Copy Files
-COPY files /files
-
-# Add Pimsync user and group
-RUN addgroup -g "${PIMSYNC_USER_GID}" -S "${PIMSYNC_USER}" && \
-    adduser -u "${PIMSYNC_USER_UID}" -S -D -H -G "${PIMSYNC_USER}" "${PIMSYNC_USER}" && \
-    # Set permissions for Pimsync directories and scripts
-    chown -R "${PIMSYNC_USER}":"${PIMSYNC_USER}" /pimsync && \
-    chown -R "${PIMSYNC_USER}":"${PIMSYNC_USER}" /files && \
-    chmod +x /files/scripts/*.sh 
-
 # Switch to Pimsync user
 USER "${PIMSYNC_USER}"
 
 # Run start script
-ENTRYPOINT ["sh","/files/scripts/start.sh"]
+ENTRYPOINT ["/sbin/tini", "--", "/bin/sh", "/files/scripts/start.sh"]

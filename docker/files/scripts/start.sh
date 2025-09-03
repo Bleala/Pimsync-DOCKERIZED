@@ -3,9 +3,10 @@
 # Set TS function for logging
 # Moreutils (which contains ts command) would need too much space in my opinion, because of perl dependencies
 # So awk is used
-ts_awk(){
-    awk '{ printf "[%s] %s\n", strftime("%Y-%m-%d %H:%M:%S"), $0; fflush() }'
-}
+# Use 'docker logs -t' instead of ts_awk, if you want docker to add timestamps
+# ts_awk(){
+#     awk '{ printf "[%s] %s\n", strftime("%Y-%m-%d %H:%M:%S"), $0; fflush() }'
+# }
 
 # Function to log messages with timestamp, reduce code duplication
 log_message() {
@@ -13,7 +14,8 @@ log_message() {
         # Remove tabs and leading spaces from the message
         printf "%s\n" "$@" | sed 's/^[ \t]*//'
         printf "\n"
-    } 2>&1 | ts_awk
+    }
+    # 2>&1 | ts_awk
 }
 
 # Welcome Message
@@ -72,35 +74,37 @@ then
     log_message "pimsync.conf.example has been copied to /pimsync."
 fi
 
+# Has to be implemented for the manual mode or a special cron mode
 # Check, if PIMSYNC_PRE_SYNC_SCRIPT_FILE is set
-if [ -z "${PIMSYNC_PRE_SYNC_SCRIPT_FILE}" ]
-then
-    # Set Post Sync Snippet to nothing
-    PRE_SYNC_SNIPPET=""
+# if [ -z "${PIMSYNC_PRE_SYNC_SCRIPT_FILE}" ]
+# then
+#     # Set Post Sync Snippet to nothing
+#     PRE_SYNC_SNIPPET=""
 
-# Set PRE_SYNC_SNIPPET, if  PIMSYNC_PRE_SYNC_SCRIPT_FILE is set
-else
-    # User info
-    log_message "Custom before script is enabled."
+# # Set PRE_SYNC_SNIPPET, if  PIMSYNC_PRE_SYNC_SCRIPT_FILE is set
+# else
+#     # User info
+#     log_message "Custom before script is enabled."
 
-    # Set Post Sync Snippet to Post Sync File
-    PRE_SYNC_SNIPPET="${PIMSYNC_PRE_SYNC_SCRIPT_FILE} &&"
-fi
+#     # Set Post Sync Snippet to Post Sync File
+#     PRE_SYNC_SNIPPET="${PIMSYNC_PRE_SYNC_SCRIPT_FILE} &&"
+# fi
 
+# Has to be implemented for the manual mode or a special cron mode
 # Check, if PIMSYNC_POST_SYNC_SCRIPT_FILE is set
-if [ -z "${PIMSYNC_POST_SYNC_SCRIPT_FILE}" ]
-then
-    # Set Post Sync Snippet to nothing
-    POST_SYNC_SNIPPET=""
+# if [ -z "${PIMSYNC_POST_SYNC_SCRIPT_FILE}" ]
+# then
+#     # Set Post Sync Snippet to nothing
+#     POST_SYNC_SNIPPET=""
 
-# Set POST_SYNC_SNIPPET, if  PIMSYNC_POST_SYNC_SCRIPT_FILE is set
-else
-    # User info
-    log_message "Custom after script is enabled."
+# # Set POST_SYNC_SNIPPET, if  PIMSYNC_POST_SYNC_SCRIPT_FILE is set
+# else
+#     # User info
+#     log_message "Custom after script is enabled."
 
-    # Set Post Sync Snippet to Post Sync File
-    POST_SYNC_SNIPPET="&& ${PIMSYNC_POST_SYNC_SCRIPT_FILE}"
-fi
+#     # Set Post Sync Snippet to Post Sync File
+#     POST_SYNC_SNIPPET="&& ${PIMSYNC_POST_SYNC_SCRIPT_FILE}"
+# fi
 
 # Line
 log_message "----------------------------------------"
@@ -111,13 +115,13 @@ then
     # User info
     log_message "Container is running in automatic mode."
 
-    log_message "Starting Pimsync with command: ${PRE_SYNC_SNIPPET} ${PIMSYNC_EXECUTABLE_PATH} -c ${PIMSYNC_CONFIG} -v ${PIMSYNC_LOG_LEVEL} ${PIMSYNC_COMMAND} ${POST_SYNC_SNIPPET}"
+    log_message "Starting Pimsync with command: ${PIMSYNC_EXECUTABLE_PATH} -c ${PIMSYNC_CONFIG} -v ${PIMSYNC_LOG_LEVEL} ${PIMSYNC_COMMAND}"
 
     # Line
     log_message "----------------------------------------"
 
     # Start Pimsync
-    eval "exec ${PRE_SYNC_SNIPPET} ${PIMSYNC_EXECUTABLE_PATH} -c ${PIMSYNC_CONFIG} -v ${PIMSYNC_LOG_LEVEL} ${PIMSYNC_COMMAND} ${POST_SYNC_SNIPPET}" 2>&1 | ts_awk
+    exec "${PIMSYNC_EXECUTABLE_PATH}" -c "${PIMSYNC_CONFIG}" -v "${PIMSYNC_LOG_LEVEL}" "${PIMSYNC_COMMAND}"
 
 # If container is in manual mode
 elif [ "${CONTAINER_MODE}" = "manual" ]
@@ -144,7 +148,6 @@ else
                 Please set CONTAINER_MODE to \"auto\" or \"manual\"."
 
     log_message "Container is stopping now."
-
 
     # Exit script with error code 1
     exit 1
