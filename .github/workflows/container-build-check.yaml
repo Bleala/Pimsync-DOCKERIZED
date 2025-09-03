@@ -27,7 +27,6 @@ concurrency:
 env:
   BUILDCACHE_NAME: ${{ vars.BUILDCACHE_NAME }}
   BUILDCACHE_TAG: ${{ vars.BUILDCACHE_TAG }}
-  BUILD_ARGS: ${{ vars.BUILD_ARGS }}
   DOCKERFILE_PATH: ${{ vars.DOCKERFILE_PATH }}
   IMAGE_NAME: ${{ vars.IMAGE_NAME }}
   IMAGE_TAG_CI_CONTAINER_BUILD: ${{ vars.IMAGE_TAG_CI_CONTAINER_BUILD }}
@@ -71,7 +70,6 @@ jobs:
     with:
       buildcache_name: ${{ vars.BUILDCACHE_NAME }}
       buildcache_tag: ${{ vars.BUILDCACHE_TAG }}
-      build_args: ${{ vars.BUILD_ARGS }}
       image_name: ${{ vars.IMAGE_NAME }}
       image_tag: ${{ vars.IMAGE_TAG_CI_CONTAINER_BUILD }}
       platforms: ${{ vars.PLATFORMS_TO_BUILD }}
