@@ -191,7 +191,7 @@ services:
       - type: volume
         source: pimsync
         target: /pimsync   
-        read_only: true
+        read_only: false
       - type: bind
         source: /path/to/pimsync.conf
         target: /pimsync/pimsync.conf
@@ -310,7 +310,7 @@ services:
       - type: volume
         source: pimsync
         target: /pimsync   
-        read_only: true
+        read_only: false
       - type: bind
         source: /path/to/pimsync.conf
         target: /pimsync/pimsync.conf
