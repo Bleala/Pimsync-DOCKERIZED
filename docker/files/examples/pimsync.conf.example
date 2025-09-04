@@ -16,6 +16,6 @@ storage calendars_local {
 
 pair calendars {
   storage_a calendars_local
-  storage_b calendars_fastmail
+  storage_b calendars_remote
   collections all
 }
