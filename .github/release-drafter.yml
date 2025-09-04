@@ -44,6 +44,9 @@ template: |
   Download at Github Container Registry:
   https://github.com/Bleala/Pimsync-DOCKERIZED/pkgs/container/pimsync
 
+  Download at Quay.io:
+  https://quay.io/repository/bleala/pimsync
+
   ## 🏷️ Versions
   * Pimsync: 
   * Alpine: 
