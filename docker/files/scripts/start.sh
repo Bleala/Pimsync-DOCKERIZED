@@ -71,7 +71,34 @@ then
     cp /files/examples/pimsync.conf.example /pimsync/pimsync.conf.example
     
     # User info
-    log_message "pimsync.conf.example has been copied to /pimsync."
+    log_message "pimsync.conf.example has been copied to pimsync/pimsync.conf.example."
+fi
+
+# Check if the pimsync.conf exists in user home directory
+if [ ! -e "/home/pimsync/.config/pimsync/pimsync.conf" ]
+then
+    # Check if directory exists
+    if [ ! -d "/home/pimsync/.config/pimsync" ]
+    then
+        # Create directory
+        mkdir -p "/home/pimsync/.config/pimsync"
+    fi
+
+    # Check if pimsync.conf exists in /pimsync
+    if [ -e "${PIMSYNC_CONFIG}" ]
+    then
+        # Symlink pimsync.conf from /pimsync to user home directory, so that pimsync can find it without -c parameter
+        ln -s "${PIMSYNC_CONFIG}" "/home/pimsync/.config/pimsync/pimsync.conf"
+
+        # User info
+        log_message "pimsync.conf has been symlinked to /home/pimsync/.config/pimsync/pimsync.conf."
+    
+    else
+        # User info
+        log_message "Cannot find pimsync.conf in ${PIMSYNC_CONFIG}.
+                    Please make sure to mount your config file to ${PIMSYNC_CONFIG}.
+                    You can find an example config file at /pimsync/pimsync.conf.example."
+    fi
 fi
 
 # Has to be implemented for the manual mode or a special cron mode
