@@ -1,29 +1,48 @@
 networks:
   pimsync:
-    name: pimsync
     driver: bridge
 
+volumes:
+  pimsync:
+    name: pimsync
+    driver: local
+
 services:
-  # Pimsync - to synchronise calendars and contacts between different storages. DOCKERIZED!
+  # Pimsync - a command line tool to synchronise calendars and contacts between different storages, including CalDAV and CardDAV. 
+  # Pimsync is a successor and reimplementation of Vdirsyncer, and is free and open source software. DOCKERIZED!
   # https://hub.docker.com/r/bleala/pimsync
   # https://github.com/Bleala/Pimsync-DOCKERIZED
   pimsync:
     image: bleala/pimsync:latest
     container_name: pimsync
     hostname: pimsync
-    restart: always
+    restart: unless-stopped
     security_opt:
       - no-new-privileges:true
     environment:
-      # Optional: set your timezone, for correct container and log time, default to Europe/Vienna
+      # Optional: set your timezone, for correct container and log time, default to `Europe/Vienna`
       TZ: Europe/Vienna
+      # Optional: set the container mode, `auto` will run the PIMSYNC_COMMAND, `manual` will only run the container, so you can exec into it and run your commands manually, default to auto
+      CONTAINER_MODE: auto
+      # Optional: set the Pimsync command for `auto` mode, default to `daemon`, can be extended with flags, e.g. "sync -n" or "daemon -r"
+      PIMSYNC_COMMAND: daemon
+      # Optional: set the Pimsync config path, default to `/pimsync/pimsync.conf`
+      PIMSYNC_CONFIG: /pimsync/pimsync.conf
+      # Optional: set the Pimsync executable path, default to `/usr/local/bin/pimsync`
+      PIMSYNC_EXECUTABLE_PATH: /usr/local/bin/pimsync
+      # Optional: set the Pimsync log level, default to `info`, other options are  `trace`, `debug`, `warn` or `error`
+      PIMSYNC_LOG_LEVEL: info
     env_file:
       - path: .env
         required: false
     networks:
       pimsync:
     volumes:
+      - type: volume
+        source: pimsync
+        target: /pimsync   
+        read_only: true
       - type: bind
         source: /path/to/pimsync.conf
-        target: /etc/pimsync/pimsync.conf
+        target: /pimsync/pimsync.conf
         read_only: true
