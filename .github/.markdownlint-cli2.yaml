@@ -1,6 +1,0 @@
-#
-# An example .markdownlint-cli2.yaml file
-#
-
-# Disable some built-in rules
-config: ".github/.markdownlint.yaml"
