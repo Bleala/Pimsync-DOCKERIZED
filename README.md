@@ -249,6 +249,12 @@ Everything that is done by `Pimsync` will get written to the docker logs! Run `d
 As you can see in the [pimsync.conf.example](https://github.com/Bleala/Pimsync-DOCKERIZED/blob/main/docker/files/examples/pimsync.conf.example "pimsync.conf.example"), I set `/pimsync/calendars/` as path for the local storage and for the pair `test` as local folder. So to work properly the path/folder `/pimsync/calendars/test` has to exist before you run your first sync!<br>
 Either create it with `docker exec -it pimsync "mkdir -p /path/to/your/local/folder"` (in my example this would be `docker exec -it pimsync "mkdir -p /pimsync/calendars/test"`) or if you have mounted a local folder to `/pimsync` create the subfolder and make sure, that it is readable and writable by the `pimsync` user (`UID/GID 1000`)!
 
+For further information look at the available man pages:
+
+* [pimsync.1](https://pimsync.whynothugo.nl/pimsync.1.html "pimsync.1")
+* [pimsync.conf.5](https://pimsync.whynothugo.nl/pimsync.conf.5.html "pimsync.conf.5")
+* [pimsync-migration.7](https://pimsync.whynothugo.nl/pimsync-migration.7.html "pimsync-migration.7")
+
 ---
 
 ## User
