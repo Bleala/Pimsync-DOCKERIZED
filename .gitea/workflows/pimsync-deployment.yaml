@@ -7,13 +7,13 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Specify the version to build and tag (default: 1.23.0)'
-        required: true
+        description: 'Specify the version to build and tag (default: 1.0.0)'
+        required: false
         default: '1.0.0'
         type: string
       source:
         description: 'Specify the branch/tag to build from (default: main)'
-        required: true
+        required: false
         default: 'main'
         type: string 
 

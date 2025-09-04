@@ -1,5 +1,6 @@
 # Global variables
 ARG ALPINE_VERSION="3.22.1" \
+    IMAGE_VERSION="1.0.0" \
     PIMSYNC_VERSION="0.4.4"
 
 # -----------------------------------------------------------------------------------------------
@@ -63,10 +64,10 @@ FROM alpine:${ALPINE_VERSION} AS pimsync
 
 # Build arguments
 ARG ALPINE_VERSION \
+    IMAGE_VERSION \
     PIMSYNC_USER="pimsync" \
     PIMSYNC_USER_UID="1000" \
-    PIMSYNC_USER_GID="1000" \
-    PIMSYNC_VERSION
+    PIMSYNC_USER_GID="1000"
 
 # Set environment variables
     # Set Mode for container
@@ -137,7 +138,7 @@ ARG BUILD_DATE
 # Set labels
 LABEL org.opencontainers.image.authors="Bleala" \
       org.opencontainers.image.vendor="Bleala" \
-      org.opencontainers.image.version="${PIMSYNC_VERSION}" \
+      org.opencontainers.image.version="${IMAGE_VERSION}" \
       org.opencontainers.image.created="${BUILD_DATE}" \
       org.opencontainers.image.title="Pimsync-DOCKERIZED" \
       org.opencontainers.image.description="Pimsync - to synchronise calendars and contacts between different storages. DOCKERIZED!" \
