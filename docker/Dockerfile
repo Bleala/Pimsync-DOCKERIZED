@@ -124,7 +124,7 @@ COPY files /files
 
 # Add Pimsync user and group
 RUN addgroup -g "${PIMSYNC_USER_GID}" -S "${PIMSYNC_USER}" && \
-    adduser -u "${PIMSYNC_USER_UID}" -S -D -H -G "${PIMSYNC_USER}" "${PIMSYNC_USER}" && \
+    adduser -u "${PIMSYNC_USER_UID}" -S -D -G "${PIMSYNC_USER}" "${PIMSYNC_USER}" && \
     # Set permissions for Pimsync directories and scripts
     chown -R "${PIMSYNC_USER}":"${PIMSYNC_USER}" /pimsync && \
     chown -R "${PIMSYNC_USER}":"${PIMSYNC_USER}" /files && \
