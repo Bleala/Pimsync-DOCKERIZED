@@ -155,6 +155,8 @@ MD033:
   # Allowed elements
   allowed_elements:
     - br
+    - details
+    - summary
 
 # MD034/no-bare-urls : Bare URL used : https://github.com/DavidAnson/markdownlint/blob/v0.32.1/doc/md034.md
 MD034: true
@@ -198,7 +200,8 @@ MD042: true
 # MD043/required-headings : Required heading structure : https://github.com/DavidAnson/markdownlint/blob/v0.32.1/doc/md043.md
 MD043:
   # List of headings
-  headings: []
+  headings:
+    - "*"
   # Match case of headings
   match_case: false
 
