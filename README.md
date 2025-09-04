@@ -1,52 +1,60 @@
 # [Pimsync](https://pimsync.whynothugo.nl/ "Official Documentation")-DOCKERIZED
+
 [![GitHub Release](https://img.shields.io/github/v/release/Bleala/Pimsync-DOCKERIZED?style=flat&label=Version)](https://github.com/Bleala/Pimsync-DOCKERIZED/releases)
 [![Docker Stars](https://img.shields.io/docker/stars/bleala/pimsync?style=flat&label=Docker%20Stars)](https://hub.docker.com/r/bleala/pimsync)
 [![Docker Pulls](https://img.shields.io/docker/pulls/bleala/pimsync?style=flat&label=Docker%20Pulls)](https://hub.docker.com/r/bleala/pimsync)
 [![Container Build Check 🐳✅](https://github.com/Bleala/Pimsync-DOCKERIZED/actions/workflows/container-build-check.yaml/badge.svg)](https://github.com/Bleala/Pimsync-DOCKERIZED/actions/workflows/container-build-check.yaml)
 
-Pimsync - a command line tool to synchronise calendars and contacts between different storages, including CalDAV and CardDAV. Pimsync is a successor and reimplementation of Vdirsyncer, and is free and open source software. DOCKERIZED! 
+Pimsync - a command line tool to synchronise calendars and contacts between different storages, including CalDAV and CardDAV. Pimsync is a successor and reimplementation of Vdirsyncer, and is free and open source software. DOCKERIZED!
 
 ---
 
 ## About Pimsync
+
 **Disclaimer:** I am just the maintainer of this docker container, I did not write the software. Visit the [Official Pimsync Website](https://pimsync.whynothugo.nl/ "Official Pimsync Website") or the [Official Sourcehut Repository](https://git.sr.ht/~whynothugo/pimsync "Pimsync Sourcehut Repository") to thank the author(s)! :)
 
 Pimsync is a command line tool to synchronise calendars and contacts between different storages, including CalDAV and CardDAV. Pimsync is a successor and reimplementation of Vdirsyncer, and is free and open source software.
 
 Pimsync synchronises documentation across storages. Currently supported storages are:
+
 * **CalDAV:** HTTP extension which provides read and write access to calendars on servers.
 * **CardDAV:** HTTP extension which provides read and write access to address books on servers.
 * **Vdir:** Convention for storing calendars and address books in local directories using standardised and well-documented formats.
 * **WebCal:** Convention for exposing a calendar or event read-only using HTTP.
 
 Common use cases include:
+
 * Synchronising a CalDAV or CardDAV server with a local directory. Local data can then be accessed and manipulated by a variety of programs, none of which have to know or worry about synchronisation, network connectivity, or remote servers. The changes are then synced back to the server periodically.
 * Synchronising from server to a local directory with the intent of keeping back-ups using a tool that backs up local directory trees.
 * Synchronising data between two different CalDAV or CardDAV servers.
 
 Pimsync is configured via a configuration file. It can then be used to synchronise data once (via the pimsync sync command) or to keep data synchronised continuously (via the pimsync daemon command).
 
+1. Test123
+
+2. Test4334
+
 ---
 
 ## Links
 
-Official Website: https://pimsync.whynothugo.nl/
+Official Website: <https://pimsync.whynothugo.nl/>
 
-Official Sourcehut Repository: https://git.sr.ht/~whynothugo/pimsync
+Official Sourcehut Repository: <https://git.sr.ht/~whynothugo/pimsync>
 
-Docs: https://pimsync.whynothugo.nl/
+Docs: <https://pimsync.whynothugo.nl/>
 
-My Github Repository: https://github.com/Bleala/Pimsync-DOCKERIZED
+My Github Repository: <https://github.com/Bleala/Pimsync-DOCKERIZED>
 
 ---
 
 ## Downloads
 
-Docker Hub: https://hub.docker.com/r/bleala/pimsync
+Docker Hub: <https://hub.docker.com/r/bleala/pimsync>
 
-Github Container Registry: https://github.com/-/bleala/packages/container/package/pimsync
+Github Container Registry: <https://github.com/-/bleala/packages/container/package/pimsync>
 
-Quay.io: https://quay.io/repository/bleala/pimsync
+Quay.io: <https://quay.io/repository/bleala/pimsync>
 
 ---
 
@@ -59,7 +67,7 @@ There will always be a latest image and the semantic versioning images:
 | Tag | Content |
 | ------------- |:-------------:|
 | Latest    | Contains the latest stable version |
-| x.x.x     | Contains the Pimsync and Alpine versions mentioned at the bottom of the page and in the release notes | 
+| x.x.x     | Contains the Pimsync and Alpine versions mentioned at the bottom of the page and in the release notes |
 
 I am using semantic versioning for this image. For all supported architectures there are the following versioned tags:
 
@@ -71,8 +79,9 @@ I am using semantic versioning for this image. For all supported architectures t
 There are also several platforms supported:
 
 Platforms:
+
 * linux/amd64
-* linux/arm64 
+* linux/arm64
 * linux/arm/v7
 
 ---
@@ -82,19 +91,20 @@ Platforms:
 To ensure the authenticity and integrity of my images, all `bleala/pimsync` images pushed to `Docker Hub`, `GitHub Container Registry` and `Quay.io` (and maybe more in the future) are signed using [Cosign](https://github.com/sigstore/cosign "Cosign").
 
 I use a static key pair for signing. The public key required for verification, `cosign.pub`, is available in the root of this GitHub repository:
+
 * **Public Key:** [`cosign.pub`](https://github.com/Bleala/Pimsync-DOCKERIZED/blob/main/cosign.pub "cosign.pub")
 
 ### How to Verify an Image
 
 You can verify the signature of an image to ensure it hasn't been tampered with and originates from me.
 
-1.  **Install Cosign:**
+1. **Install Cosign:**
     If you don't have Cosign installed, follow the official installation instructions: [Cosign Installation Guide](https://docs.sigstore.dev/cosign/system_config/installation/ "Cosign Installation Guide").
 
-2.  **Obtain the Public Key:**
+2. **Obtain the Public Key:**
     Download the [`cosign.pub`](https://github.com/Bleala/Pimsync-DOCKERIZED/blob/main/cosign.pub "cosign.pub") file from this repository or clone the repository to access it locally.
 
-3.  **Verify the Image:**
+3. **Verify the Image:**
     Use the `cosign verify` command. It is highly recommended to verify against the image **digest** (e.g., `sha256:...`) rather than a mutable tag (like `latest` or `1.23.0`). You can find image digests on Docker Hub or GitHub Container Registry.
 
     ```bash
@@ -109,13 +119,14 @@ You can verify the signature of an image to ensure it hasn't been tampered with 
     ```
 
     For instance, to verify the `dev` tag with the following digest `sha256:bd9b65a3a65425bd4b67de6a61670aa0e551f996ac5f466da8aa603ab9acd005`:
+
     ```bash
     cosign verify --key cosign.pub docker.io/bleala/pimsync@sha256:bd9b65a3a65425bd4b67de6a61670aa0e551f996ac5f466da8aa603ab9acd005
     ```
 
     A successful verification will output information like this:
 
-    ```
+    ```bash
     cosign verify --key cosign.pub docker.io/bleala/pimsync@sha256:bd9b65a3a65425bd4b67de6a61670aa0e551f996ac5f466da8aa603ab9acd005
 
     Verification for index.docker.io/bleala/pimsync@sha256:bd9b65a3a65425bd4b67de6a61670aa0e551f996ac5f466da8aa603ab9acd005 --
@@ -133,13 +144,12 @@ You can verify the signature of an image to ensure it hasn't been tampered with 
 
 To start the container you can run the following
 
-```
+```bash
 docker run -d -v /path/to/your/config:/pimsync/pimsync.conf \
         bleala/pimsync:latest
 ```
 
 But since docker compose is easier to maintain, I'll give you a valid docker compose example.
-
 
 ```docker-compose.yml
 networks:
@@ -194,19 +204,19 @@ services:
 
 You can start the docker-compose.yml with the following command
 
-```
+```bash
 docker compose up -d
 ```
 
 If you want to see the container logs, you can run
 
-```
+```bash
 docker compose logs -f
 ```
 
 or
 
-```
+```bash
 docker logs -f pimsync
 ```
 
@@ -217,7 +227,7 @@ docker logs -f pimsync
 You have to mount a local configuration file inside the container to work properly. [How to config](https://pimsync.whynothugo.nl/pimsync.1.html "Pimsync configuration")
 
 In the `/pimsnyc` folder you will also find the `pimsync.conf.example` which I copied inside the container for a quick reference.<br>
-You can also find the `pimsync.conf.example` in this GitHub repository. ([Link](https://github.com/Bleala/Pimsync-DOCKERIZED/blob/main/docker/files/examples/pimsync.conf.example "pimsync.conf.example"))
+You can also find the `pimsync.conf.example` in this GitHub repository. ([pimsync.conf.example](https://github.com/Bleala/Pimsync-DOCKERIZED/blob/main/docker/files/examples/pimsync.conf.example "pimsync.conf.example"))
 
 The configuration file name is `pimsync.conf`. Write everything like it is shown in the docs and in my `pimsync.conf.example`!
 
@@ -230,8 +240,7 @@ After the container is started and your `pimsync.conf` is mounted, I suggest tha
 
 Now you can discover your defined pairs with `docker exec -it pimsync pimsync discover`, to check if the connection to your configured storages does work as expected.
 
-
-After you ran `docker exec -it pimsync pimsync discover` you can either run `docker exec -it pimsync pimsync sync` or, if you have not set `CONTAINER_MODE: auto` and `PIMSYNC_COMMAND: daemon`, set it to `auto`/`daemon` and restart the container with `docker compose restart` or deploy it again with `docker compose up -d`. 
+After you ran `docker exec -it pimsync pimsync discover` you can either run `docker exec -it pimsync pimsync sync` or, if you have not set `CONTAINER_MODE: auto` and `PIMSYNC_COMMAND: daemon`, set it to `auto`/`daemon` and restart the container with `docker compose restart` or deploy it again with `docker compose up -d`.
 
 Now it will sync everything for the first time.
 
@@ -322,7 +331,7 @@ You can set a few different environment variables if you want to:
 
 | **Variable** | **Info** | **Value** |
 |:----:|:----:|:----:|
-|   `TZ`   |   to set the correct container and log time   |   optional, default to `Europe/Vienna`, look [here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones "Timezones") for possible values  |
+|   `TZ`   |   to set the correct container and log time   |   optional, default to `Europe/Vienna`, look [here for possible values](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones "Timezones")  |
 |   `CONTAINER_MODE`   |   is used automatically run `pimsync ${PIMSYNC_COMMAND}` or to just start the container for manual `pimsync` commands   |   optional, default to `auto`, can be `manual`   |
 |   `PIMSYNC_COMMAND`   |   is used to specify the `Pimsync` command in `auto` mode   |   optional, default to `daemon`, can be [any of these commands](https://pimsync.whynothugo.nl/pimsync.1.html#COMMANDS "Pimsync Commands")    |
 |   `PIMSYNC_CONFIG`   |   is used to set the `Pimsync` config file location   |   optional, default to `/pimsync/pimsync.conf`   |
@@ -335,20 +344,20 @@ You can set a few different environment variables if you want to:
 
 Clone this repo and then:
 
-```
+```bash
 cd Pimsync-DOCKERIZED/docker
 docker build -t bleala/pimsync:dev .
 ```
 
 Or you can use the provided [docker-compose.override.yml](https://github.com/Bleala/Pimsync-DOCKERIZED/blob/master/docker/docker-compose.override.yml "docker-compose.override.yml") file:
 
-```
+```bash
 docker compose -f docker-compose.override.yml build
 ```
 
 For more information on using multiple compose files [see here](https://docs.docker.com/compose/production/). You can also find a prebuilt docker image from [Docker Hub](https://hub.docker.com/r/bleala/pimsync/ "Docker Hub"), which can be pulled with this command:
 
-```
+```bash
 docker pull bleala/pimsync:latest
 ```
 
@@ -365,18 +374,22 @@ Feel free to create a PR with your changes and I will merge it, if it's ok.
 ---
 
 ## Versions
+
 **1.0.0 - 04.09.2025:**<br>
+
 * Initial Release!<br>
 * Build on Alpine 3.22.1 with Pimsmync Version 0.4.4.<br>
 * [Official Documentation](https://pimsync.whynothugo.nl/ "Official Documentation").<br>
 
 **Current Versions:**<br>
+
 * Pimsync 0.4.4, Alpine 3.22.1
 
 <details>
 <summary>Old Version History</summary><br>
 
 **1.0.0 - 04.09.2025:**<br>
+
 * Initial Release!<br>
 * Build on Alpine 3.22.1 with Pimsmync Version 0.4.4.<br>
 * [Official Documentation](https://pimsync.whynothugo.nl/ "Official Documentation").<br>
@@ -384,5 +397,7 @@ Feel free to create a PR with your changes and I will merge it, if it's ok.
 </details>
 
 ---
+
 ### Hope you enjoy it! :)
+
 ---
