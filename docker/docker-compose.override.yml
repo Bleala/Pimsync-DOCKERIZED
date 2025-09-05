@@ -1,3 +1,4 @@
+---
 services:
   pimsync:
     image: bleala/pimsync:dev

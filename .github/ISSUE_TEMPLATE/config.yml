@@ -1,3 +1,4 @@
+---
 # Deaktiviert die Erstellung von leeren Issues und zwingt Benutzer, eine Vorlage zu wählen.
 blank_issues_enabled: false
 

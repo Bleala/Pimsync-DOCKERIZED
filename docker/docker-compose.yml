@@ -1,3 +1,4 @@
+---
 networks:
   pimsync:
     driver: bridge
@@ -8,7 +9,7 @@ volumes:
     driver: local
 
 services:
-  # Pimsync - a command line tool to synchronise calendars and contacts between different storages, including CalDAV and CardDAV. 
+  # Pimsync - a command line tool to synchronise calendars and contacts between different storages, including CalDAV and CardDAV.
   # Pimsync is a successor and reimplementation of Vdirsyncer, and is free and open source software. DOCKERIZED!
   # https://hub.docker.com/r/bleala/pimsync
   # https://github.com/Bleala/Pimsync-DOCKERIZED
@@ -36,11 +37,11 @@ services:
       - path: .env
         required: false
     networks:
-      pimsync:
+      pimsync: {}
     volumes:
       - type: volume
         source: pimsync
-        target: /pimsync   
+        target: /pimsync
         read_only: false
       - type: bind
         source: /path/to/pimsync.conf
