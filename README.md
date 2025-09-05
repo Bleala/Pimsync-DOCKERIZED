@@ -148,6 +148,7 @@ docker run -d -v /path/to/your/config:/pimsync/pimsync.conf \
 But since docker compose is easier to maintain, I'll give you a valid docker compose example.
 
 ```docker-compose.yml
+---
 networks:
   pimsync:
     driver: bridge
@@ -158,7 +159,7 @@ volumes:
     driver: local
 
 services:
-  # Pimsync - a command line tool to synchronise calendars and contacts between different storages, including CalDAV and CardDAV. 
+  # Pimsync - a command line tool to synchronise calendars and contacts between different storages, including CalDAV and CardDAV.
   # Pimsync is a successor and reimplementation of Vdirsyncer, and is free and open source software. DOCKERIZED!
   # https://hub.docker.com/r/bleala/pimsync
   # https://github.com/Bleala/Pimsync-DOCKERIZED
@@ -174,7 +175,7 @@ services:
       TZ: Europe/Vienna
       # Optional: set the container mode, `auto` will run the PIMSYNC_COMMAND, `manual` will only run the container, so you can exec into it and run your commands manually, default to auto
       CONTAINER_MODE: auto
-      # Optional: set the Pimsync command, default to `daemon`, can be extended with flags, e.g. "sync -n" or "daemon -r"
+      # Optional: set the Pimsync command for `auto` mode, default to `daemon`, can be extended with flags, e.g. "sync -n" or "daemon -r"
       PIMSYNC_COMMAND: daemon
       # Optional: set the Pimsync config path, default to `/pimsync/pimsync.conf`
       PIMSYNC_CONFIG: /pimsync/pimsync.conf
@@ -186,11 +187,11 @@ services:
       - path: .env
         required: false
     networks:
-      pimsync:
+      pimsync: {}
     volumes:
       - type: volume
         source: pimsync
-        target: /pimsync   
+        target: /pimsync
         read_only: false
       - type: bind
         source: /path/to/pimsync.conf
@@ -272,6 +273,7 @@ Example:
 <summary>Complete docker-compose.yml with the `user` key</summary><br>
 
 ```docker-compose.yml
+---
 networks:
   pimsync:
     driver: bridge
@@ -282,7 +284,7 @@ volumes:
     driver: local
 
 services:
-  # Pimsync - a command line tool to synchronise calendars and contacts between different storages, including CalDAV and CardDAV. 
+  # Pimsync - a command line tool to synchronise calendars and contacts between different storages, including CalDAV and CardDAV.
   # Pimsync is a successor and reimplementation of Vdirsyncer, and is free and open source software. DOCKERIZED!
   # https://hub.docker.com/r/bleala/pimsync
   # https://github.com/Bleala/Pimsync-DOCKERIZED
@@ -311,11 +313,11 @@ services:
       - path: .env
         required: false
     networks:
-      pimsync:
+      pimsync: {}
     volumes:
       - type: volume
         source: pimsync
-        target: /pimsync   
+        target: /pimsync
         read_only: false
       - type: bind
         source: /path/to/pimsync.conf
