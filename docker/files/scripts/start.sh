@@ -166,7 +166,7 @@ then
     log_message "----------------------------------------"
 
     # Start container
-    exec tail -f /dev/null
+    exec "${SLEEP_EXECUTABLE_PATH}" infinity
 
 # If CONTAINER_MODE is not set correctly
 else
