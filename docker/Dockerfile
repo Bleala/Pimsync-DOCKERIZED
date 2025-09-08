@@ -89,7 +89,9 @@ ENV CONTAINER_MODE="auto" \
     # Set script path to run before Pimsync commands
     PIMSYNC_PRE_SYNC_SCRIPT_FILE="" \
     # Set Pimsync user and group
-    PIMSYNC_USER="${PIMSYNC_USER}"
+    PIMSYNC_USER="${PIMSYNC_USER}" \
+    # Sleep Path
+    SLEEP_EXECUTABLE_PATH="/bin/sleep"
 
 # Healthcheck
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=1 \
