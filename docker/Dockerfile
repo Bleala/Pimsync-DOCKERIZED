@@ -1,7 +1,7 @@
 # Global variables
-ARG ALPINE_VERSION="3.22.1" \
-    IMAGE_VERSION="1.0.0" \
-    PIMSYNC_VERSION="0.4.4"
+ARG ALPINE_VERSION="3.22.2" \
+    IMAGE_VERSION="1.0.1" \
+    PIMSYNC_VERSION="0.5.4"
 
 # -----------------------------------------------------------------------------------------------
 
@@ -27,12 +27,14 @@ RUN set -x && \
       lynx=~2.9.2 \
       grep=~3.12 \
       make=~4.4.1 \
-      rust=~1.87.0 \
-      cargo=~1.87.0 \
+      build-base=~0.5 \
       sqlite-dev=~3.49.2 \
+      sqlite-static=~3.49.2 \
       mandoc=~1.14.6 && \
-      # Clean up apk cache
-      rm -rf /var/cache/apk/*
+    # Clean up apk cache
+    rm -rf /var/cache/apk/* && \
+    # Install newest Rust version
+    curl --proto '=https' --tlsv1.3 -sSf https://sh.rustup.rs | sh -s -- -y
 
 # Set workdir
 WORKDIR /tmp/pimsync-build-${PIMSYNC_VERSION}
@@ -52,6 +54,8 @@ RUN git clone "${PIMSYNC_GIT}" "/tmp/pimsync-build-${PIMSYNC_VERSION}" && \
     git checkout "v${PIMSYNC_VERSION}" && \
     # Verify the git tag with GPG and grep for "Good signature from", because gpg key is expired at the moment
     git tag -v "v${PIMSYNC_VERSION}" 2>&1 | grep -e "Good signature from" || true && \
+    # Add Rust to PATH
+    export PATH="$HOME/.cargo/bin:$PATH" && \
     # Compile Pimsync
     make build && \
     # Install Pimsync
@@ -89,7 +93,9 @@ ENV CONTAINER_MODE="auto" \
     # Set script path to run before Pimsync commands
     PIMSYNC_PRE_SYNC_SCRIPT_FILE="" \
     # Set Pimsync user and group
-    PIMSYNC_USER="${PIMSYNC_USER}"
+    PIMSYNC_USER="${PIMSYNC_USER}" \
+    # Sleep Path
+    SLEEP_EXECUTABLE_PATH="/bin/sleep"
 
 # Healthcheck
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=1 \
