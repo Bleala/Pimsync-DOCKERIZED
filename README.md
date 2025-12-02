@@ -378,18 +378,22 @@ Feel free to create a PR with your changes and I will merge it, if it's ok.
 
 ## Versions
 
+**1.0.2 - 02.12.2025:**<br>
+
+* Pimsync update to version 0.5.5<br>
+
+**Current Versions:**<br>
+
+* Pimsync 0.5.5, Alpine 3.22.2
+
+<details>
+<summary>Old Version History</summary><br>
+
 **1.0.1 - 17.10.2025:**<br>
 
 * Pimsync update to version 0.5.4<br>
 * Alpine update to version 3.22.2<br>
 * Moved to official Rust install script instead of apk <br>
-
-**Current Versions:**<br>
-
-* Pimsync 0.5.4, Alpine 3.22.2
-
-<details>
-<summary>Old Version History</summary><br>
 
 **1.0.0 - 04.09.2025:**<br>
 
