@@ -62,8 +62,8 @@ There will always be a latest image and the semantic versioning images:
 
 | Tag | Content |
 | ------------- |:-------------:|
-| Latest    | Contains the latest stable version |
-| x.x.x     | Contains the Pimsync and Alpine versions mentioned at the bottom of the page and in the release notes |
+| Latest | Contains the latest stable version |
+| x.x.x | Contains the Pimsync and Alpine versions mentioned at the bottom of the page and in the release notes |
 
 I am using semantic versioning for this image. For all supported architectures there are the following versioned tags:
 
@@ -334,12 +334,12 @@ You can set a few different environment variables if you want to:
 
 | **Variable** | **Info** | **Value** |
 |:----:|:----:|:----:|
-|   `TZ`   |   to set the correct container and log time   |   optional, default to `Europe/Vienna`, look [here for possible values](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones "Timezones")  |
-|   `CONTAINER_MODE`   |   is used automatically run `pimsync ${PIMSYNC_COMMAND}` or to just start the container for manual `pimsync` commands   |   optional, default to `auto`, can be `manual`   |
-|   `PIMSYNC_COMMAND`   |   is used to specify the `Pimsync` command in `auto` mode   |   optional, default to `daemon`, can be [any of these commands](https://pimsync.whynothugo.nl/pimsync.1.html#COMMANDS "Pimsync Commands")    |
-|   `PIMSYNC_CONFIG`   |   is used to set the `Pimsync` config file location   |   optional, default to `/pimsync/pimsync.conf`   |
-|   `PIMSYNC_EXECUTABLE_PATH`   |   is used to set the `Pimsync` executable path   |   optional, default to `/usr/local/bin/pimsync`, should not be changed!   |
-|   `PIMSYNC_LOG_LEVEL`   |   is used to set the `Pimsync` log level   |   optional, default to `info`, can be `trace`, `debug`, `info`, `warn` or `error`   |
+| `TZ` | to set the correct container and log time | optional, default to `Europe/Vienna`, look [here for possible values](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones "Timezones") |
+| `CONTAINER_MODE` | is used automatically run `pimsync ${PIMSYNC_COMMAND}` or to just start the container for manual `pimsync` commands | optional, default to `auto`, can be `manual` |
+| `PIMSYNC_COMMAND` | is used to specify the `Pimsync` command in `auto` mode | optional, default to `daemon`, can be [any of these commands](https://pimsync.whynothugo.nl/pimsync.1.html#COMMANDS "Pimsync Commands") |
+| `PIMSYNC_CONFIG` | is used to set the `Pimsync` config file location | optional, default to `/pimsync/pimsync.conf` |
+| `PIMSYNC_EXECUTABLE_PATH` | is used to set the `Pimsync` executable path | optional, default to `/usr/local/bin/pimsync`, should not be changed! |
+| `PIMSYNC_LOG_LEVEL` | is used to set the `Pimsync` log level | optional, default to `info`, can be `trace`, `debug`, `info`, `warn` or `error` |
 
 ---
 
