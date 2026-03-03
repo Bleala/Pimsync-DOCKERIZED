@@ -1,7 +1,7 @@
 # Global variables
-ARG ALPINE_VERSION="3.22.2" \
-    IMAGE_VERSION="1.0.2" \
-    PIMSYNC_VERSION="0.5.5"
+ARG ALPINE_VERSION="3.23.3" \
+    IMAGE_VERSION="1.0.3" \
+    PIMSYNC_VERSION="0.5.6"
 
 # -----------------------------------------------------------------------------------------------
 
@@ -21,15 +21,15 @@ SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 RUN set -x && \
     apk update && \
     apk add --no-cache --virtual .build-deps \
-      git=~2.49.1 \
-      gnupg=~2.4.7 \
-      curl=~8.14.1 \
+      git=~2.52.0 \
+      gnupg=~2.4.9 \
+      curl=~8.17.0 \
       lynx=~2.9.2 \
       grep=~3.12 \
       make=~4.4.1 \
       build-base=~0.5 \
-      sqlite-dev=~3.49.2 \
-      sqlite-static=~3.49.2 \
+      sqlite-dev=~3.51.2 \
+      sqlite-static=~3.51.2 \
       mandoc=~1.14.6 && \
     # Clean up apk cache
     rm -rf /var/cache/apk/* && \
@@ -105,15 +105,15 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=1 \
 RUN apk update && \
     apk add --no-cache \
       # For running Pimsync
-      sqlite-libs=~3.49.2 \
+      sqlite-libs=~3.51.2 \
       # For running Pimsync
       musl=~1.2.5 \
       # For running Pimsync
-      libgcc=~14.2.0 \
+      libgcc=~15.2.0 \
       # To view the manual pages of Pimsync
       mandoc=~1.14.6 \
       # For timezone handling
-      tzdata=~2025b \
+      tzdata=~2025c \
       # Tini as a minimal init system to handle signal processing
       tini=~0.19.0
 
