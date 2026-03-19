@@ -378,7 +378,7 @@ Feel free to create a PR with your changes and I will merge it, if it's ok.
 
 ## Versions
 
-**1.0.3 - 19.03.2026:**<br>
+**1.0.4 - 19.03.2026:**<br>
 
 * Pimsync update to version 0.5.7<br>
 
