@@ -1,7 +1,7 @@
 # Global variables
 ARG ALPINE_VERSION="3.23.3" \
-    IMAGE_VERSION="1.0.3" \
-    PIMSYNC_VERSION="0.5.6"
+    IMAGE_VERSION="1.0.4" \
+    PIMSYNC_VERSION="0.5.7"
 
 # -----------------------------------------------------------------------------------------------
 
@@ -113,7 +113,7 @@ RUN apk update && \
       # To view the manual pages of Pimsync
       mandoc=~1.14.6 \
       # For timezone handling
-      tzdata=~2025c \
+      tzdata=~2026a \
       # Tini as a minimal init system to handle signal processing
       tini=~0.19.0
 

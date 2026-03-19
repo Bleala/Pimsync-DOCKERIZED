@@ -378,6 +378,10 @@ Feel free to create a PR with your changes and I will merge it, if it's ok.
 
 ## Versions
 
+**1.0.3 - 19.03.2026:**<br>
+
+* Pimsync update to version 0.5.7<br>
+
 **1.0.3 - 03.03.2026:**<br>
 
 * Pimsync update to version 0.5.6<br>
@@ -393,10 +397,6 @@ Feel free to create a PR with your changes and I will merge it, if it's ok.
 **1.0.2 - 02.12.2025:**<br>
 
 * Pimsync update to version 0.5.5<br>
-
-**Current Versions:**<br>
-
-* Pimsync 0.5.5, Alpine 3.22.2
 
 **1.0.1 - 17.10.2025:**<br>
 
