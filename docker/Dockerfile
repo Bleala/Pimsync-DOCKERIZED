@@ -113,7 +113,7 @@ RUN apk update && \
       # To view the manual pages of Pimsync
       mandoc=~1.14.6 \
       # For timezone handling
-      tzdata=~2025c \
+      tzdata=~2026a \
       # Tini as a minimal init system to handle signal processing
       tini=~0.19.0
 
