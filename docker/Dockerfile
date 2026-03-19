@@ -20,6 +20,7 @@ SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 # Install build dependencies
 RUN set -x && \
     apk update && \
+    apk upgrade && \
     apk add --no-cache --virtual .build-deps \
       git=~2.52.0 \
       gnupg=~2.4.9 \
@@ -103,6 +104,7 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=1 \
 
 # Install runtime dependencies
 RUN apk update && \
+    apk upgrade && \
     apk add --no-cache \
       # For running Pimsync
       sqlite-libs=~3.51.2 \
