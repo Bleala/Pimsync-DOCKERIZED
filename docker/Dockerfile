@@ -20,6 +20,7 @@ SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 # Install build dependencies
 RUN set -x && \
     apk update && \
+    apk upgrade && \
     apk add --no-cache --virtual .build-deps \
       git=~2.52.0 \
       gnupg=~2.4.9 \
