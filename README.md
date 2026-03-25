@@ -4,6 +4,7 @@
 [![Docker Stars](https://img.shields.io/docker/stars/bleala/pimsync?style=flat&label=Docker%20Stars)](https://hub.docker.com/r/bleala/pimsync)
 [![Docker Pulls](https://img.shields.io/docker/pulls/bleala/pimsync?style=flat&label=Docker%20Pulls)](https://hub.docker.com/r/bleala/pimsync)
 [![Container Build Check 🐳✅](https://github.com/Bleala/Pimsync-DOCKERIZED/actions/workflows/container-build-check.yaml/badge.svg)](https://github.com/Bleala/Pimsync-DOCKERIZED/actions/workflows/container-build-check.yaml)
+[![Signed by: Sigstore/Cosign](https://img.shields.io/badge/Signed_by-Sigstore%2FCosign-blue?style=flat&logo=sigstore&logoColor=white)](https://github.com/sigstore/cosign)
 
 Pimsync - a command line tool to synchronise calendars and contacts between different storages, including CalDAV and CardDAV. Pimsync is a successor and reimplementation of Vdirsyncer, and is free and open source software. DOCKERIZED!
 
