@@ -67,7 +67,7 @@ log_message "Current PIMSYNC_LOG_LEVEL is ${PIMSYNC_LOG_LEVEL}."
 # Check if the pimsync.conf.example exists
 if [ ! -e "/pimsync/pimsync.conf.example" ]
 then
-    # Copy pimsync.conf.example to vdirsyncer directory
+    # Copy pimsync.conf.example to pimsync directory
     cp /files/examples/pimsync.conf.example /pimsync/pimsync.conf.example
     
     # User info
@@ -75,23 +75,23 @@ then
 fi
 
 # Check if the pimsync.conf exists in user home directory
-if [ ! -e "/home/pimsync/.config/pimsync/pimsync.conf" ]
+if [ ! -e "/home/${PIMSYNC_USER}/.config/pimsync/pimsync.conf" ]
 then
     # Check if directory exists
-    if [ ! -d "/home/pimsync/.config/pimsync" ]
+    if [ ! -d "/home/${PIMSYNC_USER}/.config/pimsync" ]
     then
         # Create directory
-        mkdir -p "/home/pimsync/.config/pimsync"
+        mkdir -p "/home/${PIMSYNC_USER}/.config/pimsync"
     fi
 
     # Check if pimsync.conf exists in /pimsync
     if [ -e "${PIMSYNC_CONFIG}" ]
     then
         # Symlink pimsync.conf from /pimsync to user home directory, so that pimsync can find it without -c parameter
-        ln -s "${PIMSYNC_CONFIG}" "/home/pimsync/.config/pimsync/pimsync.conf"
+        ln -s "${PIMSYNC_CONFIG}" "/home/${PIMSYNC_USER}/.config/pimsync/pimsync.conf"
 
         # User info
-        log_message "pimsync.conf has been symlinked to /home/pimsync/.config/pimsync/pimsync.conf."
+        log_message "pimsync.conf has been symlinked to /home/${PIMSYNC_USER}/.config/pimsync/pimsync.conf."
     
     else
         # User info

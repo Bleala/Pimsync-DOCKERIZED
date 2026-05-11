@@ -1,7 +1,7 @@
 # Global variables
-ARG ALPINE_VERSION="3.23.3" \
-    IMAGE_VERSION="1.0.4" \
-    PIMSYNC_VERSION="0.5.7"
+ARG ALPINE_VERSION="3.23.4" \
+    IMAGE_VERSION="1.0.5" \
+    PIMSYNC_VERSION="0.5.8"
 
 # -----------------------------------------------------------------------------------------------
 
@@ -14,26 +14,23 @@ ARG ALPINE_VERSION \
     PIMSYNC_GIT="https://git.sr.ht/~whynothugo/pimsync" \
     PIMSYNC_WEBSITE="https://pimsync.whynothugo.nl/install.html"
 
-# Set shell to ash
+# Set shell options
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
-
 # Install build dependencies
 RUN set -x && \
-    apk update && \
-    apk upgrade && \
     apk add --no-cache --virtual .build-deps \
-      git=~2.52.0 \
-      gnupg=~2.4.9 \
-      curl=~8.17.0 \
-      lynx=~2.9.2 \
-      grep=~3.12 \
-      make=~4.4.1 \
-      build-base=~0.5 \
-      sqlite-dev=~3.51.2 \
-      sqlite-static=~3.51.2 \
-      mandoc=~1.14.6 && \
-    # Clean up apk cache
-    rm -rf /var/cache/apk/* && \
+      # For strip command
+      binutils \
+      build-base \
+      curl \
+      git \
+      gnupg \
+      grep \
+      lynx \
+      make \
+      mandoc \
+      sqlite-dev \
+      sqlite-static && \
     # Install newest Rust version
     curl --proto '=https' --tlsv1.3 -sSf https://sh.rustup.rs | sh -s -- -y
 
@@ -58,9 +55,12 @@ RUN git clone "${PIMSYNC_GIT}" "/tmp/pimsync-build-${PIMSYNC_VERSION}" && \
     # Add Rust to PATH
     export PATH="$HOME/.cargo/bin:$PATH" && \
     # Compile Pimsync
+    # Cores not set as cargo uses all available cores by default
     make build && \
     # Install Pimsync
-    make install
+    make install && \
+    # Strip binary to reduce size
+    strip /usr/local/bin/pimsync
 
 # -----------------------------------------------------------------------------------------------
 
@@ -74,11 +74,14 @@ ARG ALPINE_VERSION \
     PIMSYNC_USER_UID="1000" \
     PIMSYNC_USER_GID="1000"
 
+# Set shell options
+SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
+
 # Set environment variables
     # Set Mode for container
 ENV CONTAINER_MODE="auto" \
     # Set Pimsync path
-    PATH="/usr/local/bin/pimsync:${PATH}" \
+    PATH="/usr/local/bin:${PATH}" \
     # Set Timezone
     TZ="Europe/Vienna" \
     # Pimsync Command
@@ -103,24 +106,23 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=1 \
   CMD ["/files/scripts/healthcheck.sh"]
 
 # Install runtime dependencies
-RUN apk update && \
-    apk upgrade && \
-    apk add --no-cache \
+RUN apk add --no-cache \
       # For running Pimsync
-      sqlite-libs=~3.51.2 \
-      # For running Pimsync
-      musl=~1.2.5 \
-      # For running Pimsync
-      libgcc=~15.2.0 \
+      libgcc \
       # To view the manual pages of Pimsync
-      mandoc=~1.14.6 \
+      mandoc \
+      # For running Pimsync
+      musl \
+      # For running Pimsync
+      sqlite-libs \
       # For timezone handling
-      tzdata=~2026a \
+      tzdata \
       # Tini as a minimal init system to handle signal processing
-      tini=~0.19.0
+      tini
 
-# Set workdir
-WORKDIR /pimsync
+# Add Pimsync user and group
+RUN addgroup -g "${PIMSYNC_USER_GID}" -S "${PIMSYNC_USER}" && \
+    adduser -u "${PIMSYNC_USER_UID}" -S -D -G "${PIMSYNC_USER}" "${PIMSYNC_USER}"
 
 # Copy Pimsync from the build stage 
 COPY --from=pimsync-builder /usr/local/bin/pimsync /usr/local/bin/pimsync
@@ -129,15 +131,7 @@ COPY --from=pimsync-builder /usr/local/bin/pimsync /usr/local/bin/pimsync
 COPY --from=pimsync-builder /usr/local/share/man /usr/local/share/man
 
 # Copy Files
-COPY files /files
-
-# Add Pimsync user and group
-RUN addgroup -g "${PIMSYNC_USER_GID}" -S "${PIMSYNC_USER}" && \
-    adduser -u "${PIMSYNC_USER_UID}" -S -D -G "${PIMSYNC_USER}" "${PIMSYNC_USER}" && \
-    # Set permissions for Pimsync directories and scripts
-    chown -R "${PIMSYNC_USER}":"${PIMSYNC_USER}" /pimsync && \
-    chown -R "${PIMSYNC_USER}":"${PIMSYNC_USER}" /files && \
-    chmod +x /files/scripts/*.sh
+COPY --chown="${PIMSYNC_USER_UID}:${PIMSYNC_USER_GID}" --chmod=755 files /files
 
 # Set build date argument here, because caching would break otherwise
 # It is set during the build process in the reusable workflow
@@ -156,6 +150,10 @@ LABEL org.opencontainers.image.authors="Bleala" \
 
 # Switch to Pimsync user
 USER "${PIMSYNC_USER}"
+
+# Set workdir
+# Needs to be after USER --> otherwise would be owned by root
+WORKDIR /pimsync
 
 # Run start script
 ENTRYPOINT ["/sbin/tini", "--", "/bin/sh", "/files/scripts/start.sh"]
