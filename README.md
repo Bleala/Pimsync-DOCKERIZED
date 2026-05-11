@@ -381,35 +381,43 @@ Feel free to create a PR with your changes and I will merge it, if it's ok.
 
 **1.0.4 - 19.03.2026:**<br>
 
-* Pimsync update to version 0.5.7<br>
-
-**1.0.3 - 03.03.2026:**<br>
-
-* Pimsync update to version 0.5.6<br>
-* Alpine update to version 3.23.3<br>
+* Pimsync update to version 0.5.8
+* Alpine update to version 3.23.4
+* Dockerfile optimizations
+* Start script optimizations
 
 **Current Versions:**<br>
 
-* Pimsync 0.5.6, Alpine 3.23.3
+* Pimsync 0.5.8
+* Alpine 3.23.4
 
 <details>
 <summary>Old Version History</summary><br>
 
+**1.0.4 - 19.03.2026:**<br>
+
+* Pimsync update to version 0.5.7
+
+**1.0.3 - 03.03.2026:**<br>
+
+* Pimsync update to version 0.5.6
+* Alpine update to version 3.23.3
+
 **1.0.2 - 02.12.2025:**<br>
 
-* Pimsync update to version 0.5.5<br>
+* Pimsync update to version 0.5.5
 
 **1.0.1 - 17.10.2025:**<br>
 
-* Pimsync update to version 0.5.4<br>
-* Alpine update to version 3.22.2<br>
-* Moved to official Rust install script instead of apk <br>
+* Pimsync update to version 0.5.4
+* Alpine update to version 3.22.2
+* Moved to official Rust install script instead of apk
 
 **1.0.0 - 04.09.2025:**<br>
 
-* Initial Release!<br>
-* Build on Alpine 3.22.1 with Pimsmync Version 0.4.4.<br>
-* [Official Documentation](https://pimsync.whynothugo.nl/ "Official Documentation").<br>
+* Initial Release!
+* Build on Alpine 3.22.1 with Pimsmync Version 0.4.4.
+* [Official Documentation](https://pimsync.whynothugo.nl/ "Official Documentation").
 
 </details>
 
@@ -418,3 +426,4 @@ Feel free to create a PR with your changes and I will merge it, if it's ok.
 ### Hope you enjoy it! :)
 
 ---
+ 
