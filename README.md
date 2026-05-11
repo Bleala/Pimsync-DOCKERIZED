@@ -379,20 +379,24 @@ Feel free to create a PR with your changes and I will merge it, if it's ok.
 
 ## Versions
 
+**1.0.6 - 11.05.2026:**<br>
+
+* Pimsync update to version 0.5.9
+
+**Current Versions:**<br>
+
+* Pimsync 0.5.9
+* Alpine 3.23.4
+
+<details>
+<summary>Old Version History</summary><br>
+
 **1.0.5 - 11.05.2026:**<br>
 
 * Pimsync update to version 0.5.8
 * Alpine update to version 3.23.4
 * Dockerfile optimizations
 * Start script optimizations
-
-**Current Versions:**<br>
-
-* Pimsync 0.5.8
-* Alpine 3.23.4
-
-<details>
-<summary>Old Version History</summary><br>
 
 **1.0.4 - 19.03.2026:**<br>
 
