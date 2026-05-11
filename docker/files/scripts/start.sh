@@ -67,7 +67,7 @@ log_message "Current PIMSYNC_LOG_LEVEL is ${PIMSYNC_LOG_LEVEL}."
 # Check if the pimsync.conf.example exists
 if [ ! -e "/pimsync/pimsync.conf.example" ]
 then
-    # Copy pimsync.conf.example to vdirsyncer directory
+    # Copy pimsync.conf.example to pimsync directory
     cp /files/examples/pimsync.conf.example /pimsync/pimsync.conf.example
     
     # User info
