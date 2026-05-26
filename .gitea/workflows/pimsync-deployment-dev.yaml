@@ -104,7 +104,7 @@ jobs:
       # https://github.com/marketplace/actions/cosign-installer
       - name: Set Up Cosign ✍️
         id: setup-cosign
-        uses: sigstore/cosign-installer@cad07c2e89fa2edd6e2d7bab4c1aa38e53f76003 # v4.1.1
+        uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
 
       # https://github.com/marketplace/actions/docker-login
       - name: Login To Docker Hub 🔑🐳
@@ -260,7 +260,7 @@ jobs:
       # https://github.com/marketplace/actions/ghcr-io-cleanup-action
       - name: GHCR Clean Up 'pre-release-dev' Image Tag 🧹🏷️
         id: ghcr-clean-up-pre-release-dev
-        uses: dataaxiom/ghcr-cleanup-action@cd0cdb900b5dbf3a6f2cc869f0dbb0b8211f50c4 # v1.0.16
+        uses: dataaxiom/ghcr-cleanup-action@34a2b6c814b9c6bcb92f78cba3e56a7ab9ca7a86 # v1.1.0
         if: always()
         with:
           token: ${{ secrets.TOKEN_GITHUB }}
@@ -272,7 +272,7 @@ jobs:
       # https://github.com/marketplace/actions/ghcr-io-cleanup-action
       - name: GHCR Clean Up 'buildcache' Image Tag 🧹🏷️
         id: ghcr-clean-up-buildcache
-        uses: dataaxiom/ghcr-cleanup-action@cd0cdb900b5dbf3a6f2cc869f0dbb0b8211f50c4 # v1.0.16
+        uses: dataaxiom/ghcr-cleanup-action@34a2b6c814b9c6bcb92f78cba3e56a7ab9ca7a86 # v1.1.0
         if: always()
         with:
           token: ${{ secrets.TOKEN_GITHUB }}
