@@ -1,7 +1,7 @@
 # Global variables
-ARG ALPINE_VERSION="3.23.4" \
-    IMAGE_VERSION="1.0.6" \
-    PIMSYNC_VERSION="0.5.9"
+ARG ALPINE_VERSION="3.23.5" \
+    IMAGE_VERSION="1.0.7" \
+    PIMSYNC_VERSION="0.5.10"
 
 # -----------------------------------------------------------------------------------------------
 
@@ -16,6 +16,7 @@ ARG ALPINE_VERSION \
 
 # Set shell options
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
+
 # Install build dependencies
 RUN set -x && \
     apk add --no-cache --virtual .build-deps \
