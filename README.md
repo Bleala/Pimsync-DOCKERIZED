@@ -381,16 +381,21 @@ Feel free to create a PR with your changes and I will merge it, if it's ok.
 
 **1.0.7 - 01.07.2026:**<br>
 
-* Pimsync update to version 0.5.10
-* Alpine update to version 3.23.5
+* Pimsync update to version 0.5.11
+* Alpine update to version 3.24.1
 
 **Current Versions:**<br>
 
-* Pimsync 0.5.10
-* Alpine 3.23.5
+* Pimsync 0.5.11
+* Alpine 3.24.1
 
 <details>
 <summary>Old Version History</summary><br>
+
+**1.0.7 - 01.07.2026:**<br>
+
+* Pimsync update to version 0.5.10
+* Alpine update to version 3.23.5
 
 **1.0.6 - 11.05.2026:**<br>
 
