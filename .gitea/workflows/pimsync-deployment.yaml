@@ -55,7 +55,7 @@ jobs:
       # https://github.com/marketplace/actions/hadolint-action
       - name: Lint Dockerfile 🐳📄🔍
         id: dockerfile-linter
-        uses: hadolint/hadolint-action@2332a7b74a6de0dda2e2221d575162eba76ba5e5 # v3.3.0
+        uses: hadolint/hadolint-action@2a66e89f53d0771bb131a7fa31f3136336094aa6 # v3.4.0
         with:
           dockerfile: ${{ env.DOCKERFILE_PATH }}
           ignore: SC2015
@@ -121,7 +121,7 @@ jobs:
       # https://github.com/marketplace/actions/docker-login
       - name: Login To Docker Hub 🔑🐳
         id: docker-login-dockerhub
-        uses: docker/login-action@371161bbe7024a29a25c5e19bfcbc0804fe9ad2c # v4.5.2
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
         with:
           registry: ${{ env.REGISTRY_DOCKERHUB }}
           username: ${{ env.USERNAME_DOCKERHUB }}
@@ -130,7 +130,7 @@ jobs:
       # https://github.com/marketplace/actions/docker-login
       - name: Login To Gitea 🔑🌐
         id: docker-login-gitea
-        uses: docker/login-action@371161bbe7024a29a25c5e19bfcbc0804fe9ad2c # v4.5.2
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
         with:
           registry: ${{ secrets.REGISTRY_GITEA }}
           username: ${{ env.USERNAME_GITEA }}
@@ -139,7 +139,7 @@ jobs:
       # https://github.com/marketplace/actions/docker-login
       - name: Login To GitHub Container Registry 🔑📦
         id: docker-login-ghcr
-        uses: docker/login-action@371161bbe7024a29a25c5e19bfcbc0804fe9ad2c # v4.5.2
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
         with:
           registry: ${{ env.REGISTRY_GITHUB }}
           username: ${{ env.USERNAME_GITHUB }}
@@ -148,7 +148,7 @@ jobs:
       # https://github.com/marketplace/actions/docker-login
       - name: Login To Quay.io 🔑🌐
         id: docker-login-quay
-        uses: docker/login-action@371161bbe7024a29a25c5e19bfcbc0804fe9ad2c # v4.5.2
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
         with:
           registry: ${{ env.REGISTRY_QUAY }}
           username: ${{ secrets.USERNAME_QUAY_ROBOT }}
