@@ -51,3 +51,5 @@ template: |
   ## 🏷️ Versions
   * Pimsync:
   * Alpine:
+
+  **Full Changelog**: https://github.com/Bleala/Pimsync-DOCKERIZED/compare/$PREVIOUS_TAG...$RESOLVED_VERSION
