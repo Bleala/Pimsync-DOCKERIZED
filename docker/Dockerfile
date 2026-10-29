@@ -1,7 +1,7 @@
 # Global variables
 ARG ALPINE_VERSION="3.24.1" \
     IMAGE_VERSION="1.0.9" \
-    PIMSYNC_VERSION="0.6.0"
+    PIMSYNC_VERSION="0.7.0"
 
 # -----------------------------------------------------------------------------------------------
 
