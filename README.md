@@ -379,17 +379,22 @@ Feel free to create a PR with your changes and I will merge it, if it's ok.
 
 ## Versions
 
-**1.0.9 - 10.09.2026:**<br>
+**1.0.10 - 20.11.2026:**<br>
 
-* Pimsync update to version 0.6.0
+* Pimsync update to version 0.7.0
+* Alpine update to version 3.24.4
 
 **Current Versions:**<br>
 
-* Pimsync 0.6.0
-* Alpine 3.24.1
+* Pimsync 0.7.0
+* Alpine 3.24.4
 
 <details>
 <summary>Old Version History</summary><br>
+
+**1.0.9 - 10.09.2026:**<br>
+
+* Pimsync update to version 0.6.0
 
 **1.0.8 - 01.07.2026:**<br>
 
